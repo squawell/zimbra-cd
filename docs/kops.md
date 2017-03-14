@@ -3,7 +3,6 @@ Manual steps from validation POC stage to launch stuff using kops and kubectl.
 Table of Contents
 =================
 
-  * [Table of Contents](#table-of-contents)
   * [kops quick notes](#kops-quick-notes)
     * [Installing kops](#installing-kops)
     * [Other deps: kubernetes\-cli and awscli](#other-deps-kubernetes-cli-and-awscli)
@@ -24,6 +23,12 @@ Table of Contents
     * [Verify from a mon node if ceph status is OK](#verify-from-a-mon-node-if-ceph-status-is-ok)
     * [Test cephfs](#test-cephfs)
     * [Test RDB](#test-rdb)
+  * [Docker stuff](#docker-stuff)
+    * [Create a snapshot image of the container](#create-a-snapshot-image-of-the-container)
+    * [Tag (latest) and push your image](#tag-latest-and-push-your-image)
+    * [Resources](#resources)
+  * [Miscellaneous stuff](#miscellaneous-stuff)
+    * [Generate TOC](#generate-toc)
 
 
 kops quick notes
@@ -455,3 +460,47 @@ rbd image 'ceph-rbd-test':
 	features: layering
 	flags:
 ```
+
+# Docker stuff
+
+## Create a snapshot image of the container
+
+`$ docker commit <CONTAINER ID> cascadeo/kops:<TIMESTAMP LIKE 2017031400>`
+
+## Tag (latest) and push your image
+
+```
+$ docker images
+... get the container image ID of the snapshot image from above
+
+$ docker tag <CONTAINER IMAGE ID> cascadeo/kops:latest
+
+$ docker login
+Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+Username: fortran01
+Password:
+Login Succeeded
+
+$ docker push cascadeo/kops
+The push refers to a repository [docker.io/cascadeo/kops]
+7ea37f72f1ab: Pushed
+62f62f75eaa2: Layer already exists
+d17d48b2382a: Layer already exists
+2017031400: digest: sha256:ad8043df5703c8dd95b92c787c2308157fbacccbfafeb45cb5a91359dee5fabf size: 954
+7ea37f72f1ab: Layer already exists
+62f62f75eaa2: Layer already exists
+d17d48b2382a: Layer already exists
+latest: digest: sha256:ad8043df5703c8dd95b92c787c2308157fbacccbfafeb45cb5a91359dee5fabf size: 954
+```
+
+Verify tags in https://hub.docker.com/r/cascadeo/kops/tags/.
+
+## Resources
+
+* https://docs.docker.com/engine/reference/commandline/commit/#examples
+* https://docs.docker.com/engine/getstarted/step_six/
+
+# Miscellaneous stuff
+
+## Generate TOC
+`$ gh-md-toc ~/Dropbox/notes/kops.md`
