@@ -1,3 +1,3 @@
 # synacor
 
-* https://github.com/cascadeo/zibootstrapper - bootstrapper / workstation
+* https://github.com/prem-cascadeo/zibootstrapper - bootstrapper / workstation
