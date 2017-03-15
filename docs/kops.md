@@ -23,9 +23,11 @@ Table of Contents
     * [Verify from a mon node if ceph status is OK](#verify-from-a-mon-node-if-ceph-status-is-ok)
     * [Test cephfs](#test-cephfs)
     * [Test RDB](#test-rdb)
+  * [Run zibootstrapper](#run-zibootstrapper)
   * [Docker stuff](#docker-stuff)
     * [Create a snapshot image of the container](#create-a-snapshot-image-of-the-container)
     * [Tag (latest) and push your image](#tag-latest-and-push-your-image)
+    * [Build an image from your Dockerfile](#build-an-image-from-your-dockerfile)
     * [Resources](#resources)
   * [Miscellaneous stuff](#miscellaneous-stuff)
     * [Generate TOC](#generate-toc)
@@ -461,6 +463,10 @@ rbd image 'ceph-rbd-test':
 	flags:
 ```
 
+# Run zibootstrapper
+
+`$ docker run -i -t --env-file ./env.list cascadeo/zibootstrapper /bin/bash`
+
 # Docker stuff
 
 ## Create a snapshot image of the container
@@ -495,10 +501,18 @@ latest: digest: sha256:ad8043df5703c8dd95b92c787c2308157fbacccbfafeb45cb5a91359d
 
 Verify tags in https://hub.docker.com/r/cascadeo/kops/tags/.
 
+## Build an image from your Dockerfile
+
+```
+$ cd <where Dockerfile is>
+$ docker build -t cascadeo/zibootstrapper .
+```
+
 ## Resources
 
 * https://docs.docker.com/engine/reference/commandline/commit/#examples
 * https://docs.docker.com/engine/getstarted/step_six/
+* https://docs.docker.com/engine/getstarted/step_four/#step-2-build-an-image-from-your-dockerfile
 
 # Miscellaneous stuff
 
