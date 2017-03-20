@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mta-service
+  labels:
+    app: mta
+spec:
+  ports:
+  - name: mailbox-port-25
+    port: 25
+  - name: mailbox-port-465
+    port: 465
+  - name: mailbox-port-587
+    port: 587
+  clusterIP: None
+  selector:
+    app: mta

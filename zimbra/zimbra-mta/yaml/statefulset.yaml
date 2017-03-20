@@ -12,7 +12,7 @@ spec:
    spec:
      containers:
      - name: mta
-       image: docker.io/arvincascadeo11/zimbra-mta:v10
+       image: docker.io/arvincascadeo11/zimbra-mta:v11
        env:
        - name: EXT_DOMAIN
          value: arvin-k8s.cascadeo.info

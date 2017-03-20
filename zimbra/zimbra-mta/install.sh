@@ -85,8 +85,6 @@ echo "Restart CROND"
 service crond restart
 
 echo "Server is ready..."
-echo "Login to https://${SERVER_IP} as normal user"
-echo "Login as admin user at https://${SERVER_IP}:7071"
 
 if [[ $1 == "-d" ]]; then
   while true; do sleep 1000; done
