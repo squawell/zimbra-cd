@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+ name: proxy-service
+spec:
+ type: LoadBalancer
+ ports:
+   - name: zimbra-port-443
+     port: 443
+     targetPort: 443
+   - name: zimbra-port-110
+     port: 110
+     targetPort: 110
+   - name: zimbra-port-995
+     port: 995
+     targetPort: 995
+   - name: zimbra-port-143
+     port: 143
+     targetPort: 143
+   - name: zimbra-port-993
+     port: 993
+     targetPort: 993
+   - name: zimbra-port-7071
+     port: 7071
+     targetPort: 7071
+ selector:
+   app: proxy

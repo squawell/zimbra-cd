@@ -1,0 +1,25 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+ name: ldap
+spec:
+ serviceName: ldap-service
+ replicas: 1
+ template:
+   metadata:
+     labels:
+       app: ldap
+   spec:
+     containers:
+     - name: ldap
+       image: docker.io/arvincascadeo11/zimbra-ldap:v7
+       env:
+       - name: EXT_DOMAIN
+         value: arvin-k8s.cascadeo.info
+       - name: EXT_HOST
+         value: zimbra
+       - name: PASSWORD
+         value: temp1234
+       ports:
+       - containerPort: 22
+       - containerPort: 389

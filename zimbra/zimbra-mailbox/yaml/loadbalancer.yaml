@@ -1,0 +1,14 @@
+kind: Service
+metadata:
+ name: mb-service-2
+spec:
+ type: LoadBalancer
+ ports:
+   - name: admin-port
+     port: 7071
+     targetPort: 7071
+   - name: cleint-port
+     port: 443
+     targetPort: 443
+ selector:
+   app: mailbox

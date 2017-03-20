@@ -1,0 +1,37 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+ name: mta
+spec:
+ serviceName: mta-service
+ replicas: 1
+ template:
+   metadata:
+     labels:
+       app: mta
+   spec:
+     containers:
+     - name: mta
+       image: docker.io/arvincascadeo11/zimbra-mta:v10
+       env:
+       - name: EXT_DOMAIN
+         value: arvin-k8s.cascadeo.info
+       - name: EXT_HOST
+         value: zimbra
+       - name: PASSWORD
+         value: temp1234
+       ports:
+       - containerPort: 22
+       - containerPort: 25
+       - containerPort: 80
+       - containerPort: 110
+       - containerPort: 143
+       - containerPort: 389
+       - containerPort: 443
+       - containerPort: 465
+       - containerPort: 587
+       - containerPort: 993
+       - containerPort: 995
+       - containerPort: 7071
+       - containerPort: 8080
+       - containerPort: 8443
