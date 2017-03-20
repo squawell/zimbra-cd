@@ -40,3 +40,9 @@ For now, please do the following
 zmprov cd test.local
 zmprov ca testadmin@test.local test1234 zimbraIsAdminAccount TRUE
 ```
+
+## Testing
+After doing extra steps above
+1. get the load balancer endpoint of proxy (describe the service) then browse to https://<lb-endpoint> for client
+2. get the load balancer endpoint of mailbox (describe the service) then browse to https://<lb-endpoint>:7071 for admin
+3. login using testadmin@test.local test1234 credentials
