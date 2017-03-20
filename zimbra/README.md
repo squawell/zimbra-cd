@@ -1,4 +1,8 @@
-
+## Moved to https://hub.docker.com/u/cascadeo/dashboard/
+1. zimbra-ldap -> cascadeo/zimbra-ldap:v1
+2. zimbra-mailbox -> cascadeo/zimbra-mailbox:v1
+3. zimbra-mta -> cascadeo/zimbra-mta:v1
+4. zimbra-proxy -> cascadeo/zimbra-proxy:v1
 
 ## Assumption: There is already a running cluster
 
@@ -36,9 +40,3 @@ For now, please do the following
 zmprov cd test.local
 zmprov ca testadmin@test.local test1234 zimbraIsAdminAccount TRUE
 ```
-
-current dockerhub repos
-1. zimbra-ldap -> cascadeo/zimbra-ldap:v1
-2. zimbra-mailbox -> cascadeo/zimbra-mailbox:v1
-3. zimbra-mta -> cascadeo/zimbra-mta:v1
-4. zimbra-proxy -> cascadeo/zimbra-proxy:v1
