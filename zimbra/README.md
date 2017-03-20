@@ -31,8 +31,14 @@ For now, please do the following
 1. ssh in to mailbox-{number of pod} and proxy-{number of pod}
 2. run /opt/zimbra/libexec/zmproxyconfig -e -w -o -H <hostname> (e.g of hostname - mailbox-0.mailbox-service.default.svc.cluster.local and proxy-0.proxy-service.default.svc.cluster.local)
 3. ssh to mailbox-{number of pod}
-4. run the following 
+4. run the following
 ```
 zmprov cd test.local
 zmprov ca testadmin@test.local test1234 zimbraIsAdminAccount TRUE
 ```
+
+current dockerhub repos
+1. zimbra-ldap -> cascadeo/zimbra-ldap:v1
+2. zimbra-mailbox -> cascadeo/zimbra-mailbox:v1
+3. zimbra-mta -> cascadeo/zimbra-mta:v1
+4. zimbra-proxy -> cascadeo/zimbra-proxy:v1
