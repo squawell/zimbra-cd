@@ -1,6 +1,6 @@
 
 
-# Assumption: There is already a running cluster
+## Assumption: There is already a running cluster
 
 ## Order of installation:
 	1. zimbra-ldap
@@ -27,3 +27,12 @@
 	```
 
 ## NOTE: issues 1 and 3 will be included in the installation
+For now, please do the following
+1. ssh in to mailbox-{number of pod} and proxy-{number of pod}
+2. run /opt/zimbra/libexec/zmproxyconfig -e -w -o -H <hostname> (e.g of hostname - mailbox-0.mailbox-service.default.svc.cluster.local and proxy-0.proxy-service.default.svc.cluster.local)
+3. ssh to mailbox-{number of pod}
+4. run the following 
+```
+zmprov cd test.local
+zmprov ca testadmin@test.local test1234 zimbraIsAdminAccount TRUE
+```
