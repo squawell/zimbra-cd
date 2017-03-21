@@ -46,3 +46,8 @@ After doing extra steps above
 1. get the load balancer endpoint of proxy (describe the service) then browse to https://<lb-endpoint> for client
 2. get the load balancer endpoint of mailbox (describe the service) then browse to https://<lb-endpoint>:7071 for admin
 3. login using testadmin@test.local test1234 credentials
+
+## Testing sending email outside
+1. register domain in zimbra admin
+2. make CNAME record for elb endpoint of MTA
+3. make mx record pointing to the CNAME of step number 2
