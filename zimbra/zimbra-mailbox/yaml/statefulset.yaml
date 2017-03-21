@@ -12,7 +12,8 @@ spec:
    spec:
      containers:
      - name: mailbox
-       image: docker.io/cascadeo/zimbra-mailbox:v2
+       image: index.docker.io/cascadeo/zimbra-mailbox
+       imagePullPolicy: Always
        env:
        - name: EXT_DOMAIN
          value: arvin-k8s.cascadeo.info
@@ -35,3 +36,5 @@ spec:
        - containerPort: 7071
        - containerPort: 8080
        - containerPort: 8443
+     imagePullSecrets:
+     - name: myregistrykey

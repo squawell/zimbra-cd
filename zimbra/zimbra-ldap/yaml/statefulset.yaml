@@ -12,7 +12,8 @@ spec:
    spec:
      containers:
      - name: ldap
-       image: docker.io/cascadeo/zimbra-ldap:v2
+       image: index.docker.io/cascadeo/zimbra-ldap
+       imagePullPolicy: Always
        env:
        - name: EXT_DOMAIN
          value: arvin-k8s.cascadeo.info
@@ -23,3 +24,5 @@ spec:
        ports:
        - containerPort: 22
        - containerPort: 389
+     imagePullSecrets:
+     - name: myregistrykey
