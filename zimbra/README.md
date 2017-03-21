@@ -13,9 +13,9 @@
 	4. zimbra-proxy
 
 ## Installation:
-	1. create the headless services first per installation
+	1. create the headless/internal services first per installation
 	2. create the stateful sets
-	3. crate the loadbalancers services
+	3. crate the loadbalancers/external services
 
 ## Issues:
 	1. provided domain in the installation is being deleted after the complete installation

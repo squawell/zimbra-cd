@@ -12,7 +12,7 @@ spec:
    spec:
      containers:
      - name: proxy
-       image: docker.io/arvincascadeo11/zimbra-proxy:v24
+       image: docker.io/arvincascadeo11/zimbra-proxy:v2
        env:
        - name: EXT_DOMAIN
          value: arvin-k8s.cascadeo.info
