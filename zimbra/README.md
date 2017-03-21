@@ -31,14 +31,72 @@
 	```
 
 ## NOTE: issues 1 and 3 will be included in the installation
-For now, please do the following
+
+For now, please do the following:
+
 1. ssh in to mailbox-{number of pod} and proxy-{number of pod}
+
 2. run /opt/zimbra/libexec/zmproxyconfig -e -w -o -H <hostname> (e.g of hostname - mailbox-0.mailbox-service.default.svc.cluster.local and proxy-0.proxy-service.default.svc.cluster.local)
+
+Example in mailbox: 
+
+```
+# kubectl exec -it mailbox-0 -- /bin/bash
+[root@mailbox-0 /]# su - zimbra
+[zimbra@mailbox-0 ~]$  /opt/zimbra/libexec/zmproxyconfig -e -w -o -H mailbox-0.mailbox-service.default.svc.cluster.local
+```
+
+Example in proxy:
+
+```
+# kubectl exec -it proxy-0 -- /bin/bash
+[root@proxy-0 /]# su - zimbra
+[zimbra@proxy-0 ~]$ /opt/zimbra/libexec/zmproxyconfig -e -w -o -H proxy-0.proxy-service.default.svc.cluster.local
+[] INFO: keystore not present
+[] WARN: backup keystore not found
+[] INFO: keystore not present
+[] WARN: backup keystore not found
+[] INFO: keystore not present
+[] WARN: backup keystore not found
+[] INFO: keystore not present
+[] WARN: backup keystore not found
+[] INFO: keystore not present
+[] WARN: backup keystore not found
+
+# Not sure if we need to iterate for other proxy pods?? -Prem
+
+# kubectl exec -it proxy-1 -- /bin/bash
+[root@proxy-1 /]# su - zimbra
+[zimbra@proxy-1 ~]$ /opt/zimbra/libexec/zmproxyconfig -e -w -o -H proxy-1.proxy-service.default.svc.cluster.local
+[] INFO: keystore not present
+[] WARN: backup keystore not found
+[] INFO: keystore not present
+[] WARN: backup keystore not found
+[] INFO: keystore not present
+[] WARN: backup keystore not found
+[] INFO: keystore not present
+[] WARN: backup keystore not found
+[] INFO: keystore not present
+[] WARN: backup keystore not found
+```
+
 3. ssh to mailbox-{number of pod}
 4. run the following
+
 ```
 zmprov cd test.local
 zmprov ca testadmin@test.local test1234 zimbraIsAdminAccount TRUE
+```
+
+Example:
+
+```
+# kubectl exec -it mailbox-0 -- /bin/bash
+[root@mailbox-0 /]# su - zimbra
+[zimbra@mailbox-0 ~]$ zmprov cd test.local
+671e8c56-1427-46c6-93c7-daa5561192c6
+[zimbra@mailbox-0 ~]$ zmprov ca testadmin@test.local test1234 zimbraIsAdminAccount TRUE
+a6845dbc-cf3a-401b-ac68-aabdaf64c80e
 ```
 
 ## Testing
