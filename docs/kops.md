@@ -3,6 +3,7 @@ Manual steps from validation POC stage to launch stuff using kops and kubectl.
 Table of Contents
 =================
 
+  * [Table of Contents](#table-of-contents)
   * [kops quick notes](#kops-quick-notes)
     * [Installing kops](#installing-kops)
     * [Other deps: kubernetes\-cli and awscli](#other-deps-kubernetes-cli-and-awscli)
@@ -28,6 +29,7 @@ Table of Contents
     * [Create a snapshot image of the container](#create-a-snapshot-image-of-the-container)
     * [Tag (latest) and push your image](#tag-latest-and-push-your-image)
     * [Build an image from your Dockerfile](#build-an-image-from-your-dockerfile)
+    * [Support private container registry](#support-private-container-registry)
     * [Resources](#resources)
   * [Miscellaneous stuff](#miscellaneous-stuff)
     * [Generate TOC](#generate-toc)
@@ -507,6 +509,10 @@ Verify tags in https://hub.docker.com/r/cascadeo/kops/tags/.
 $ cd <where Dockerfile is>
 $ docker build -t cascadeo/zibootstrapper .
 ```
+
+## Support private container registry
+
+* http://stackoverflow.com/a/36974280/422842 (did _not_ add this line `command: [ "echo", "SUCCESS" ]`)
 
 ## Resources
 
