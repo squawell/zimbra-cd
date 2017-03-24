@@ -1,6 +1,8 @@
 At least for our POC the flow goes like this:
 
-* the zibootstrapper (aka the dev workstation container) will launch the initial k8s cluster/s that will host spinnaker and zi-pods
+* the zibootstrapper (aka the dev workstation container) will:
+	* launch the initial k8s cluster/s that will host spinnaker and zi-pods
+	* `docker run`-ning this container will give you the kubectl and kops context to manage the previously launched k8s cluster
 
 * spinnaker spins the CD pipeline. The CD pipeline stages are:
 
