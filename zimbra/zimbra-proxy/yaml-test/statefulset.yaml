@@ -18,6 +18,7 @@ spec:
        volumeMounts:
        - name: zimbra-volume
          mountPath: /etc/
+         subPath: zimbra.properties
        env:
        - name: EXT_DOMAIN
          value: arvin-k8s.cascadeo.info
