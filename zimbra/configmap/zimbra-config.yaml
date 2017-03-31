@@ -1,3 +1,7 @@
+kind: ConfigMap
+metadata:
+  name: zimbra-config
+  namespace: default
 apiVersion: v1
 data:
   zimbra.properties: |
@@ -88,11 +92,3 @@ data:
     zimbra_ldap_userdn=uid=zimbra,cn=admins,cn=zimbra
     zimbra_require_interprocess_security=1
     INSTALL_PACKAGES="zimbra-apache zimbra-core zimbra-ldap zimbra-logger zimbra-memcached zimbra-mta zimbra-proxy zimbra-snmp zimbra-spell zimbra-store "
-kind: ConfigMap
-metadata:
-  creationTimestamp: 2017-03-31T03:50:45Z
-  name: zimbra-config
-  namespace: default
-  resourceVersion: "351749"
-  selfLink: /api/v1/namespaces/default/configmaps/zimbra-config
-  uid: 386ece4f-15c5-11e7-a755-06c2767c2d2c
