@@ -14,6 +14,11 @@ spec:
      - name: proxy-test
        image: index.docker.io/cascadeo/zimbra-proxy:v2
        imagePullPolicy: Always
+       command: [ "/bin/sh", "-c", "cat /etc/zimbra.properties" ]
+       volumeMounts:
+       - name: zimbra-volume
+         mountPath: /etc/
+         subPath: zimbra.properties
        env:
        - name: EXT_DOMAIN
          value: arvin-k8s.cascadeo.info
@@ -36,5 +41,12 @@ spec:
        - containerPort: 7071
        - containerPort: 8080
        - containerPort: 8443
+     volumes:
+     - name: zimbra-volume
+       configMap:
+         name: zimbra-config
+         items:
+         - key: zimbra.properties
+           path: zimbra.properties
      imagePullSecrets:
      - name: mysecret
