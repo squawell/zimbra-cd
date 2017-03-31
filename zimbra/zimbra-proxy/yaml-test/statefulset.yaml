@@ -16,9 +16,8 @@ spec:
        imagePullPolicy: Always
        command: [ "/bin/sh", "-c", "cat /etc/zimbra.properties" ]
        volumeMounts:
-       - name: zimbra-config
+       - name: zimbra-volume
          mountPath: /etc/
-         subPath: zimbra.properties
        env:
        - name: EXT_DOMAIN
          value: arvin-k8s.cascadeo.info
@@ -42,11 +41,11 @@ spec:
        - containerPort: 8080
        - containerPort: 8443
      volumes:
-     - name: zimbra-config
+     - name: zimbra-volume
        configMap:
          name: zimbra-config
          items:
-         - key: zimbra.properties
-           path: zimbra.properties
+         - key: zimbra-properties
+           path: /etc/zimbra.properties
      imagePullSecrets:
      - name: mysecret

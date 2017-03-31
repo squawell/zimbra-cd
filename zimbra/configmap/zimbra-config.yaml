@@ -4,7 +4,7 @@ metadata:
   namespace: default
 apiVersion: v1
 data:
-  zimbra.properties: |
+  zimbra-properties: |
     AVDOMAIN="default.svc.cluster.local"
     AVUSER="admin@default.svc.cluster.local"
     CREATEADMIN="admin@default.svc.cluster.local"
