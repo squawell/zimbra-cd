@@ -46,6 +46,6 @@ spec:
          name: zimbra-config
          items:
          - key: zimbra-properties
-           path: zimbra-properties.conf
+           path: zimbra.conf
      imagePullSecrets:
      - name: mysecret
