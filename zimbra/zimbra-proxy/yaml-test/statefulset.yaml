@@ -1,9 +1,9 @@
 apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
- name: proxy
+ name: proxy-test
 spec:
- serviceName: proxy-service-tes
+ serviceName: proxy-service-test
  replicas: 1
  template:
    metadata:
