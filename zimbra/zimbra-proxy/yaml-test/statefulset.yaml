@@ -14,7 +14,6 @@ spec:
      - name: proxy-test
        image: index.docker.io/cascadeo/zimbra-proxy:v2
        imagePullPolicy: Always
-       command: [ "/bin/sh", "-c", "cat /etc/zimbra.properties" ]
        volumeMounts:
        - name: zimbra-volume
          mountPath: /etc/config
