@@ -16,7 +16,7 @@ spec:
        imagePullPolicy: Always
        command: [ "/bin/sh", "-c", "cat /etc/zimbra.properties" ]
        volumeMounts:
-       - name: zimbra-volume
+       - name: zimbra-config
          mountPath: /etc/
          subPath: zimbra.properties
        env:
@@ -42,7 +42,7 @@ spec:
        - containerPort: 8080
        - containerPort: 8443
      volumes:
-     - name: zimbra-volume
+     - name: zimbra-config
        configMap:
          name: zimbra-config
          items:
