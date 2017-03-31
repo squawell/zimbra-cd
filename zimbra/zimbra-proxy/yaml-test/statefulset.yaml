@@ -16,7 +16,7 @@ spec:
        imagePullPolicy: Always
        command: [ "/bin/sh", "-c", "cat /etc/zimbra.properties" ]
        volumeMounts:
-       - name: zimbra-properties
+       - name: zimbra-volume
          mountPath: /etc/
          subPath: zimbra.properties
        env:
