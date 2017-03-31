@@ -17,7 +17,7 @@ spec:
        command: [ "/bin/sh", "-c", "cat /etc/zimbra.properties" ]
        volumeMounts:
        - name: zimbra-volume
-         mountPath: /etc/
+         mountPath: /etc/config
        env:
        - name: EXT_DOMAIN
          value: arvin-k8s.cascadeo.info
@@ -46,6 +46,6 @@ spec:
          name: zimbra-config
          items:
          - key: zimbra-properties
-           path: /etc/
+           path: zimbra-properties.conf
      imagePullSecrets:
      - name: mysecret
