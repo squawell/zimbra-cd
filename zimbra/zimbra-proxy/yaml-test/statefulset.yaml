@@ -12,7 +12,7 @@ spec:
    spec:
      containers:
      - name: proxy-test
-       image: index.docker.io/cascadeo/zimbra-proxy:test
+       image: index.docker.io/cascadeo/zimbra-proxy:latest
        imagePullPolicy: Always
        command: [ "/bin/sh", "-c", "cat /etc/zimbra.properties" ]
        volumeMounts:
