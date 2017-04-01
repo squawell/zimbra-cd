@@ -6,7 +6,6 @@ EXPOSE 22 25 465 587 110 143 993 995 80 443 8080 8443 7071
 
 COPY install.sh /
 COPY setup_dns.sh /
-COPY create_zimbra_config.sh /
 COPY all_yes /
 #COPY *.tgz /
 

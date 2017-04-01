@@ -13,9 +13,10 @@
 	4. zimbra-proxy
 
 ## Installation:
-	1. create the headless/internal services first per installation
-	2. create the stateful sets
-	3. crate the loadbalancers/external services
+  1. create configmap zimbra-config
+	2. create the headless/internal services first per installation
+	3. create the stateful sets
+	4. crate the loadbalancers/external services
 
 ## Issues:
 	1. provided domain in the installation is being deleted after the complete installation
@@ -38,7 +39,7 @@ For now, please do the following:
 
 2. run /opt/zimbra/libexec/zmproxyconfig -e -w -o -H <hostname> (e.g of hostname - mailbox-0.mailbox-service.default.svc.cluster.local and proxy-0.proxy-service.default.svc.cluster.local)
 
-Example in mailbox: 
+Example in mailbox:
 
 ```
 # kubectl exec -it mailbox-0 -- /bin/bash

@@ -56,8 +56,8 @@ echo "========================"
 cd /zcs-* && ./install.sh -s --platform-override < /all_yes
 echo "========================"
 
-echo "Create zimbra config"
-/create_zimbra_config.sh /zimbra_config_generated
+echo "Create zimbra config from configmap"
+envsubst < /etc/config/zimbra.conf > /zimbra_config_generated
 
 echo "Zimbra config dump"
 cat /zimbra_config_generated
@@ -85,9 +85,6 @@ echo "Restart CROND"
 service crond restart
 
 echo "Server is ready..."
-echo "Login to https://${SERVER_IP} as normal user"
-echo "Login as admin user at https://${SERVER_IP}:7071"
-
 if [[ $1 == "-d" ]]; then
   while true; do sleep 1000; done
 fi

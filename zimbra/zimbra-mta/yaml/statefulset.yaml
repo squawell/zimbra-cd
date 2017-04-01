@@ -14,6 +14,9 @@ spec:
      - name: mta
        image: index.docker.io/cascadeo/zimbra-mta
        imagePullPolicy: Always
+       volumeMounts:
+       - name: zimbra-volume
+         mountPath: /etc/config
        env:
        - name: EXT_DOMAIN
          value: arvin-k8s.cascadeo.info
@@ -36,5 +39,12 @@ spec:
        - containerPort: 7071
        - containerPort: 8080
        - containerPort: 8443
+     volumes:
+     - name: zimbra-volume
+       configMap:
+         name: zimbra-config
+         items:
+         - key: zimbra-properties
+           path: zimbra.conf
      imagePullSecrets:
      - name: myregistrykey
