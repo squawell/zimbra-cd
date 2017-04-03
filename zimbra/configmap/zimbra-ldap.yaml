@@ -31,7 +31,7 @@ data:
     LDAPADMINPASS="${PASSWORD}"
     LDAPREPPASS="${PASSWORD}"
     LDAPBESSEARCHSET=set
-    LDAPHOST="${HOSTNAME}.${DOMAIN}"
+    LDAPHOST="${HOSTNAME}.ldap-service.default.svc.cluster.local"
     LDAPPORT=389
     LDAPREPLICATIONTYPE=master
     LDAPSERVERID=2
