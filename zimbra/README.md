@@ -13,7 +13,7 @@
 	4. zimbra-proxy
 
 ## Installation:
-  1. create configmap zimbra-config
+  1. create configmaps (ldap, mailbox, mta, proxy)
 	2. create the headless/internal services first per installation
 	3. create the stateful sets
 	4. crate the loadbalancers/external services
