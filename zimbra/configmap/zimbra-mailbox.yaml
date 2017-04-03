@@ -1,6 +1,6 @@
 kind: ConfigMap
 metadata:
-  name: zimbra-config
+  name: zimbra-mailbox
   namespace: default
 apiVersion: v1
 data:
@@ -14,7 +14,7 @@ data:
     DOCREATEDOMAIN=yes
     DOTRAINSA=yes
     EXPANDMENU=no
-    HOSTNAME="${HOSTNAME}.${DOMAIN}"
+    HOSTNAME="${HOSTNAME}.mailbox-service.default.svc.cluster.local"
     HTTPPORT=80
     HTTPPROXY="TRUE"
     HTTPPROXYPORT=8080
@@ -31,7 +31,7 @@ data:
     LDAPADMINPASS="${PASSWORD}"
     LDAPREPPASS="${PASSWORD}"
     LDAPBESSEARCHSET=set
-    LDAPHOST="ldap-0.ldap-service.default.svc.cluster.local"
+    LDAPHOST="ldap-service.default.svc.cluster.local"
     LDAPPORT=389
     LDAPREPLICATIONTYPE=master
     LDAPSERVERID=2

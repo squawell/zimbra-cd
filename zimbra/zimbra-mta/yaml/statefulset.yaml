@@ -42,7 +42,7 @@ spec:
      volumes:
      - name: zimbra-volume
        configMap:
-         name: zimbra-config
+         name: zimbra-mta
          items:
          - key: zimbra-properties
            path: zimbra.conf
