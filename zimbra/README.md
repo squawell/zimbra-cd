@@ -1,8 +1,8 @@
 ## Docker images in https://hub.docker.com/u/cascadeo/dashboard/
-1. zimbra-ldap -> cascadeo/zimbra-ldap:v1
-2. zimbra-mailbox -> cascadeo/zimbra-mailbox:v1
-3. zimbra-mta -> cascadeo/zimbra-mta:v1
-4. zimbra-proxy -> cascadeo/zimbra-proxy:v1
+1. zimbra-ldap -> cascadeo/zimbra-ldap
+2. zimbra-mailbox -> cascadeo/zimbra-mailbox
+3. zimbra-mta -> cascadeo/zimbra-mta
+4. zimbra-proxy -> cascadeo/zimbra-proxy
 
 ## Assumption: There is already a running cluster
 
@@ -12,7 +12,7 @@
 	3. zimbra-mta
 	4. zimbra-proxy
 
-## Installation:
+## Installation: (with kubectl create -f <yaml file>)
   1. create configmaps (ldap, mailbox, mta, proxy)
 	2. create the headless/internal services first per installation
 	3. create the stateful sets

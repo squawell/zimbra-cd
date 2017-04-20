@@ -17,6 +17,8 @@ spec:
        volumeMounts:
        - name: zimbra-volume
          mountPath: /etc/config
+       - name: mailbox-disk
+         mountPath: /opt/zimbra
        env:
        - name: EXT_DOMAIN
          value: arvin-k8s.cascadeo.info
@@ -46,5 +48,8 @@ spec:
          items:
          - key: zimbra-properties
            path: zimbra.conf
+     - name: mailbox-disk
+        persistentVolumeClaim:
+          claimName: mailbox-pvc
      imagePullSecrets:
      - name: myregistrykey

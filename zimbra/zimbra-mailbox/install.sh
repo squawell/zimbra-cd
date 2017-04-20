@@ -84,6 +84,15 @@ service zimbra restart
 echo "Restart CROND"
 service crond restart
 
+echo "Open PROXY Ports"
+sudo su -c "/opt/zimbra/libexec/zmproxyconfig -e -w -o -H ${HOSTNAME}.mailbox-service.default.svc.cluster.local" -s /bin/sh zimbra
+
+# echo "Register domain zimbra-k8s.cascadeo.info"
+# /opt/zimbra/bin/zmprov cd zimbra-k8s.cascadeo.info
+#
+# echo "Register user admin@zimbra-k8s.cascadeo.info"
+# /opt/zimbra/bin/zmprov ca admin@zimbra-k8s.cascadeo.info test1234 zimbraIsAdminAccount TRUE
+
 echo "Server is ready..."
 if [[ $1 == "-d" ]]; then
   while true; do sleep 1000; done
