@@ -12,7 +12,7 @@ spec:
    spec:
      containers:
      - name: mailbox
-       image: index.docker.io/cascadeo/zimbra-mailbox
+       image: 092658368226.dkr.ecr.us-east-1.amazonaws.com/synacor/zimbra-mailbox
        imagePullPolicy: Always
        volumeMounts:
        - name: zimbra-volume

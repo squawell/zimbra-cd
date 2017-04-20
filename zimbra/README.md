@@ -1,4 +1,4 @@
-## Docker images in https://hub.docker.com/u/cascadeo/dashboard/
+## Docker images in https://console.aws.amazon.com/ecs/home?region=us-east-1#/repositories
 1. zimbra-ldap -> cascadeo/zimbra-ldap
 2. zimbra-mailbox -> cascadeo/zimbra-mailbox
 3. zimbra-mta -> cascadeo/zimbra-mta
@@ -13,10 +13,12 @@
 	4. zimbra-proxy
 
 ## Installation: (with kubectl create -f <yaml file>)
-  1. create configmaps (ldap, mailbox, mta, proxy)
-	2. create the headless/internal services first per installation
-	3. create the stateful sets
-	4. crate the loadbalancers/external services
+  1. Run 'aws ecr get-login | sh -' to set ~/.docker/config.json
+	2. create registry key - kubectl create -f myregistry.yaml
+  3. create configmaps (ldap, mailbox, mta, proxy) and PersistentVolumes (see readme in PersistentVolumes folder)
+	4. create the headless/internal services first per installation
+	5. create the stateful sets
+	6. crate the loadbalancers/external services
 
 ## Issues:
 	1. provided domain in the installation is being deleted after the complete installation
