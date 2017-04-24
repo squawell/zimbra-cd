@@ -192,56 +192,56 @@ After doing extra steps above
             "Id": "/hostedzone/ZSUPABGIX9RM5",
             "Name": "synacor-leo.cascadeo.info."
         }
-# get zone ID
-zone1=ZSUPABGIX9RM5
-# test retrieve
-aws route53 get-hosted-zone --id $zone1
-# create route53 json
-vi zimbra-route53.json
-{
-  "Changes": [
-    {
-      "Action": "CREATE",
-      "ResourceRecordSet": {
-        "Name": "zimbra.synacor-leo.cascadeo.info",
-        "Type": "CNAME",
-        "TTL": 60,
-        "ResourceRecords": [
-          {
-            "Value": "ac934e06c28df11e7acbf02f03ad12d8-1260158492.us-west-2.elb.amazonaws.com"
-          }
-        ]
-      }
-    },
-    {
-      "Action": "CREATE",
-      "ResourceRecordSet": {
-        "Name": "mail.synacor-leo.cascadeo.info",
-        "Type": "MX",
-        "TTL": 60,
-        "ResourceRecords": [
-          {
-            "Value": "10 zimbra.synacor-leo.cascadeo.info."
-          },
-          {
-            "Value": "20 zimbra.synacor-leo.cascadeo.info."
-          }
-        ]
-      }
-    }
-  ]
-}
-# update record sets
-aws route53 change-resource-record-sets --hosted-zone-id $zone1 --change-batch file://zimbra-route53.json
-{
-    "ChangeInfo": {
-        "Status": "PENDING",
-        "SubmittedAt": "2017-04-24T12:21:40.743Z",
-        "Id": "/change/C22U6VR1ETME69"
-    }
-}
-# query change and wait until status=INSYNC
-aws route53 get-change --id /change/C22U6VR1ETME69
+	-> get zone ID
+	zone1=ZSUPABGIX9RM5
+	-> test retrieve
+	aws route53 get-hosted-zone --id $zone1
+	-> create route53 json
+	vi zimbra-route53.json
+	{
+	  "Changes": [
+	    {
+	      "Action": "CREATE",
+	      "ResourceRecordSet": {
+	        "Name": "zimbra.synacor-leo.cascadeo.info",
+	        "Type": "CNAME",
+	        "TTL": 60,
+	        "ResourceRecords": [
+	          {
+	            "Value": "ac934e06c28df11e7acbf02f03ad12d8-1260158492.us-west-2.elb.amazonaws.com"
+	          }
+	        ]
+	      }
+	    },
+	    {
+	      "Action": "CREATE",
+	      "ResourceRecordSet": {
+	        "Name": "mail.synacor-leo.cascadeo.info",
+	        "Type": "MX",
+	        "TTL": 60,
+	        "ResourceRecords": [
+	          {
+	            "Value": "10 zimbra.synacor-leo.cascadeo.info."
+	          },
+	          {
+	            "Value": "20 zimbra.synacor-leo.cascadeo.info."
+	          }
+	        ]
+	      }
+	    }
+	  ]
+	}
+	-> update record sets
+	aws route53 change-resource-record-sets --hosted-zone-id $zone1 --change-batch file://zimbra-route53.json
+	{
+	    "ChangeInfo": {
+	        "Status": "PENDING",
+	        "SubmittedAt": "2017-04-24T12:21:40.743Z",
+	        "Id": "/change/C22U6VR1ETME69"
+	    }
+	}
+	-> query change and wait until status=INSYNC
+	aws route53 get-change --id /change/C22U6VR1ETME69
 	```
 10. Test
 	1. kubectl describe service mb-service-2
