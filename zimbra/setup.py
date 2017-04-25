@@ -57,6 +57,8 @@ def create_volume(az):
         cmd = 'kubectl create -f ' + str(file)
         os.system(cmd)
 
+    pv = os.system("kubectl get pv")
+    print pv
     print "PV and PVC Created!"
 
 def create_ldap():
@@ -79,9 +81,9 @@ def create_ldap():
     print "External LDAP service created..."
 
 def main(az):
-    build_registry()
-    create_configmaps()
-    create_volume(az)
+    #build_registry()
+    #create_configmaps()
+    #create_volume(az)
     create_ldap()
 
 
