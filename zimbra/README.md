@@ -114,48 +114,58 @@ After doing extra steps above
 3. make mx record pointing to the CNAME of step number 2
 
 ## Step by Step installation
-1. aws configure (enter your account access and secret keys)
+1. setup
+	1. Install prereqs
+		1. apt-get update && apt-get upgrade
+		2. apt-get install python-pip
+		3. pip install awscli
+		4. wget -qO- https://get.docker.com/ | sh
+		5. pull repo - git clone https://<git-user>@github.com/cascadeo/synacor.git
+		6. cd synacor/
+	2. aws configure (enter your account access and secret keys)
 2. Generate AWS myregistrykey
 	1. aws ecr get-login | sh -
 	2. cat ~/.docker/config.json | base64 -w 0
 	3. copy paste the above output to zimbra/myregistry.yaml (.dockerconfigjson field)
-	4. kubectl create -f myregistry.yaml (to create secret)
+	4. kubectl create -f zimbra/myregistry.yaml (to create secret)
 	5. kubectl get secrets (to check)
 3. create configmaps and persistent volumes (for mailbox)
 	1. kubectl create -f zimbra/configmap/zimbra-ldap.yaml
 	2. kubectl create -f zimbra/configmap/zimbra-mailbox.yaml
 	3. kubectl create -f zimbra/configmap/zimbra-mta.yaml
 	4. kubectl create -f zimbra/configmap/zimbra-proxy.yaml
-	5. kubectl get configmaps
-	6. kubectl create -f zimbra/persistentvolumes/pv.yaml
-	7. kubectl create -f zimbra/persistentvolumes/pvc.yaml
-	8. kubectl get pv
+	5. wait untill AGE is no longer <invalid> then - kubectl get configmaps
+	6. create EBS volumes in availability zone that match the region on aws configure - aws ec2 create-volume --size 10 --availability-zone us-west-2a
+	7. note volume ID from the last command and edit zimbra/persistentvolumes/pv.yaml volumeID value
+	8. kubectl create -f zimbra/persistentvolumes/pv.yaml
+	9. kubectl create -f zimbra/persistentvolumes/pvc.yaml
+	10. kubectl get pv
 4. create zimbra-ldap service
 	1. kubectl create -f zimbra/zimbra-ldap/yaml/internal-ldap-service.yaml
 	2. kubectl create -f zimbra/zimbra-ldap/yaml/statefulset.yaml
-	3. kubectl logs -f ldap-0 (wait until it is finished)
+	3. kubectl logs -f ldap-0 (Wait until "Server is ready" appears in the log)
 	4. kubectl create -f zimbra/zimbra-ldap/yaml/external-ldap-service.yaml
-	5. kubectl get services
+	5. Wait until AGE is no longer <invalid> then - kubectl get services
 5. create zimbra-mailbox service
 	1. kubectl create -f zimbra/zimbra-mailbox/yaml/internal-mailbox-service.yaml
 	2. kubectl create -f zimbra/zimbra-mailbox/yaml/statefulset.yaml
-	3. kubectl logs -f mailbox-0 (wait until it is finished)
+	3. kubectl logs -f mailbox-0 (Wait until "Server is ready" appears in the log)
 	4. kubectl create -f zimbra/zimbra-mailbox/yaml/external-mailbox-service.yaml
 	5. kubectl create -f zimbra/zimbra-mailbox/yaml/client-service.yaml
 	6. kubectl create -f zimbra/zimbra-mailbox/yaml/loadbalancer.yaml
-	7. kubectl get services
+	7. Wait until AGE is no longer <invalid> then - kubectl get services
 6. create zimbra-mta service
 	1. kubectl create -f zimbra/zimbra-mta/yaml/internal-mta-service.yaml
 	2. kubectl create -f zimbra/zimbra-mta/yaml/statefulset.yaml
-	3. kubectl logs -f mta-0 (wait until it is finished)
+	3. kubectl logs -f mta-0 (Wait until "Server is ready" appears in the log)
 	4. kubectl create -f zimbra/zimbra-mta/yaml/external-mta-service.yaml
-	5. kubectl get services
+	5. Wait until AGE is no longer <invalid> then - kubectl get services
 7. create zimbra-proxy service
 	1. kubectl create -f zimbra/zimbra-proxy/yaml/internal-proxy-service.yaml
 	2. kubectl create -f zimbra/zimbra-proxy/yaml/statefulset.yaml
-	3. kubectl logs -f proxy-0 (wait until it is finished)
+	3. kubectl logs -f proxy-0 (Wait until "Server is ready" appears in the log)
 	4. kubectl create -f zimbra/zimbra-proxy/yaml/external-proxy-service.yaml
-	5. kubectl get services
+	5. Wait until AGE is no longer <invalid> then - kubectl get services
 8. create domain and admin account, open service ports
 	1. kubectl exec -it mailbox-0 -- /bin/bash
 	2. sudo su zimbra
@@ -165,13 +175,76 @@ After doing extra steps above
 	6. exit on mailbox pod
 	7. kubectl exec -it proxy-0 -- /bin/bash
 	8. sudo su zimbra
-	9. /opt/zimbra/libexec/zmproxyconfig -e -w -o -H proxy-0.mailbox-service.default.svc.cluster.local
+	9. /opt/zimbra/libexec/zmproxyconfig -e -w -o -H proxy-0.proxy-service.default.svc.cluster.local
+	10. Exit proxy pod
 9. create MX record
-	1. kubectl describe service mta-service-external
+	1. kubectl describe service mta-service-external (note ELB endpoint)
 	2. create CNAME record in route 53 under the cluster hosted zone, for LoadBalancer endpoint at 9.1
 	3. in the same hosted zone, create MX record pointing to the CNAME at 9.2
+	```
+	aws route53 list-hosted-zones
+        {
+            "ResourceRecordSetCount": 6,
+            "CallerReference": "2E785FA4-58CB-1360-85AF-03B8389CC8BD",
+            "Config": {
+                "PrivateZone": false
+            },
+            "Id": "/hostedzone/ZSUPABGIX9RM5",
+            "Name": "synacor-leo.cascadeo.info."
+        }
+	-> get zone ID
+	zone1=ZSUPABGIX9RM5
+	-> test retrieve
+	aws route53 get-hosted-zone --id $zone1
+	-> create route53 json
+	vi zimbra-route53.json
+	{
+	  "Changes": [
+	    {
+	      "Action": "CREATE",
+	      "ResourceRecordSet": {
+	        "Name": "zimbra.synacor-leo.cascadeo.info",
+	        "Type": "CNAME",
+	        "TTL": 60,
+	        "ResourceRecords": [
+	          {
+	            "Value": "ac934e06c28df11e7acbf02f03ad12d8-1260158492.us-west-2.elb.amazonaws.com"
+	          }
+	        ]
+	      }
+	    },
+	    {
+	      "Action": "CREATE",
+	      "ResourceRecordSet": {
+	        "Name": "mail.synacor-leo.cascadeo.info",
+	        "Type": "MX",
+	        "TTL": 60,
+	        "ResourceRecords": [
+	          {
+	            "Value": "10 zimbra.synacor-leo.cascadeo.info."
+	          },
+	          {
+	            "Value": "20 zimbra.synacor-leo.cascadeo.info."
+	          }
+	        ]
+	      }
+	    }
+	  ]
+	}
+	-> update record sets
+	aws route53 change-resource-record-sets --hosted-zone-id $zone1 --change-batch file://zimbra-route53.json
+	{
+	    "ChangeInfo": {
+	        "Status": "PENDING",
+	        "SubmittedAt": "2017-04-24T12:21:40.743Z",
+	        "Id": "/change/C22U6VR1ETME69"
+	    }
+	}
+	-> query change and wait until status=INSYNC
+	aws route53 get-change --id /change/C22U6VR1ETME69
+	```
 10. Test
 	1. kubectl describe service mb-service-2
-	2. browse the LoadBalancer endpoint for admin
-	3. kubectl describe service external-proxy-service
-	4. browse the LoadBalancer endpoint for user
+	2. browse the LoadBalancer endpoint for admin - from ELB endpoint and port (7071) in 10.1
+	3. kubectl describe service proxy-service-external
+	4. browse the LoadBalancer endpoint for user - from ELB endpoint and port (443/https) in 10.3
