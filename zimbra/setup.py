@@ -3,6 +3,7 @@ import sys
 import yaml
 import glob
 import boto3
+import time
 
 def build_registry():
     print "Building Registry..."
@@ -68,8 +69,10 @@ def create_ldap():
     is_ready = False
     while not is_ready:
         grep = os.system('kubectl logs ldap-0 | grep "Server is ready"')
-        if len(grep) > 0:
+        if grep == 0:
             is_ready = True
+        else:
+            time.sleep(10)
 
     print "Statefulset service created..."
     os.system('kubectl create -f zimbra-ldap/yaml/external-ldap-service.yaml')
@@ -80,8 +83,6 @@ def main(az):
     create_configmaps()
     create_volume(az)
     create_ldap()
-
-
 
 
 if __name__ == "__main__":
