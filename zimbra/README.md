@@ -248,3 +248,10 @@ After doing extra steps above
 	2. browse the LoadBalancer endpoint for admin - from ELB endpoint and port (7071) in 10.1
 	3. kubectl describe service proxy-service-external
 	4. browse the LoadBalancer endpoint for user - from ELB endpoint and port (443/https) in 10.3
+	5. register your domain on zimbra
+		1. kubectl exec -it mailbox-0 -- /bin/bash
+		2. sudo su zimbra
+		3. zmprov cd synacor-leo.cascadeo.info (zmprov cd <domain>)
+		4. zmprov ca admin@synacor-leo.cascadeo.info test1234 zimbraIsAdminAccount TRUE (zmprov ca admin@<domain> <password> zimbraIsAdminAccount TRUE)
+		5. browse to the Load Balancer endpoint on step 10.4 and login using the account on 10.5.4
+		6. send and receive email
