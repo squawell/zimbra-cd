@@ -102,12 +102,52 @@ def create_mailbox():
     os.system('kubectl create -f zimbra-mailbox/yaml/loadbalancer.yaml')
     print "loadbalancer service created..."
 
+def create_mta():
+    print "Creating MTA service..."
+
+    os.system('kubectl create -f zimbra-mta/yaml/internal-mta-service.yaml')
+    print "Internal MTA service created..."
+    os.system('kubectl create -f zimbra-mta/yaml/statefulset.yaml')
+
+    is_ready = False
+    while not is_ready:
+        grep = os.system('kubectl logs mta-0 | grep "Server is ready"')
+        if grep == 0:
+            is_ready = True
+        else:
+            time.sleep(10)
+
+    print "Statefulset service created..."
+    os.system('kubectl create -f zimbra-mta/yaml/external-mta-service.yaml')
+    print "External MTA service created..."
+
+def create_proxy():
+    print "Creating PROXY service..."
+
+    os.system('kubectl create -f zimbra-proxy/yaml/internal-proxy-service.yaml')
+    print "Internal PROXY service created..."
+    os.system('kubectl create -f zimbra-proxy/yaml/statefulset.yaml')
+
+    is_ready = False
+    while not is_ready:
+        grep = os.system('kubectl logs proxy-0 | grep "Server is ready"')
+        if grep == 0:
+            is_ready = True
+        else:
+            time.sleep(10)
+
+    print "Statefulset service created..."
+    os.system('kubectl create -f zimbra-proxy/yaml/external-proxy-service.yaml')
+    print "External PROXY service created..."
+
 def main(az):
     build_registry()
     create_configmaps()
     create_volume(az)
     create_ldap()
     create_mailbox()
+    create_mta()
+    create_proxy()
 
 
 if __name__ == "__main__":
