@@ -4,7 +4,7 @@ metadata:
  name: mailbox
 spec:
  serviceName: mailbox-service
- replicas: 2
+ replicas: 1
  template:
    metadata:
      labels:
