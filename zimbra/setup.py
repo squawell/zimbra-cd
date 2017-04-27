@@ -80,11 +80,34 @@ def create_ldap():
     os.system('kubectl create -f zimbra-ldap/yaml/external-ldap-service.yaml')
     print "External LDAP service created..."
 
+def create_mailbox():
+    print "Creating MAILBOX service..."
+
+    os.system('kubectl create -f zimbra-mailbox/yaml/internal-mailbox-service.yaml')
+    print "Internal MAILBOX service created..."
+    os.system('kubectl create -f zimbra-mailbox/yaml/statefulset.yaml')
+
+    is_ready = False
+    while not is_ready:
+        grep = os.system('kubectl logs mailbox-0 | grep "Server is ready"')
+        if grep == 0:
+            is_ready = True
+        else:
+            time.sleep(10)
+
+    print "Statefulset service created..."
+    os.system('kubectl create -f zimbra-mailbox/yaml/external-mailbox-service.yaml')
+    print "External mailbox service created..."
+    os.system('kubectl create -f zimbra-mailbox/yaml/client-service.yaml')
+    os.system('kubectl create -f zimbra-mailbox/yaml/loadbalancer.yaml')
+    print "loadbalancer service created..."
+
 def main(az):
-    #build_registry()
-    #create_configmaps()
-    #create_volume(az)
+    build_registry()
+    create_configmaps()
+    create_volume(az)
     create_ldap()
+    create_mailbox()
 
 
 if __name__ == "__main__":
