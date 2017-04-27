@@ -46,11 +46,11 @@ spec:
          name: mailbox-disk
          annotations:
            volume.alpha.kubernetes.io/storage-class: anything
-       spec:
-         accessModes: [ "ReadWriteOnce" ]
-         resources:
-          requests:
-            storage: 10Gi
+         spec:
+          accessModes: [ "ReadWriteOnce" ]
+          resources:
+            requests:
+              storage: 10Gi
      volumes:
      - name: zimbra-volume
        configMap:
