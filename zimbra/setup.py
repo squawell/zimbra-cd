@@ -32,35 +32,6 @@ def create_configmaps():
     print configmaps
     print "Configmaps Created"
 
-def create_volume(az):
-    print "Creating Volume..."
-
-    client = boto3.client('ec2')
-    response = client.create_volume(
-        AvailabilityZone=az,
-        Size=80,
-        VolumeType='gp2',
-    )
-
-    volume_id = response['VolumeId']
-    print volume_id
-    print "Volume Created!"
-
-    print "Creating PV and PVC"
-
-    with open("persistentvolumes/pv.yaml", 'rw') as f:
-        doc = yaml.load(f)
-        doc['spec']['awsElasticBlockStore']['volumeID'] = volume_id
-        yaml.dump(f)
-
-    for file in glob.glob("persistentvolumes/*.yaml"):
-        cmd = 'kubectl create -f ' + str(file)
-        os.system(cmd)
-
-    pv = os.system("kubectl get pv")
-    print pv
-    print "PV and PVC Created!"
-
 def create_ldap():
     print "Creating LDAP service..."
 
@@ -140,14 +111,38 @@ def create_proxy():
     os.system('kubectl create -f zimbra-proxy/yaml/external-proxy-service.yaml')
     print "External PROXY service created..."
 
-def main(az):
-    build_registry()
-    create_configmaps()
-    create_volume(az)
-    create_ldap()
-    create_mailbox()
-    create_mta()
-    create_proxy()
+def create_dns_settings(cluster):
+    client = boto3.client('route53')
+
+    response = client.list_hosted_zones()
+    print response
+	# try:
+	# 	response = client.change_resource_record_sets(
+	# 	HostedZoneId='<hosted zone id>',
+	# 	ChangeBatch= {
+	# 					'Comment': 'add %s -> %s' % (source, target),
+	# 					'Changes': [
+	# 						{
+	# 						 'Action': 'UPSERT',
+	# 						 'ResourceRecordSet': {
+	# 							 'Name': source,
+	# 							 'Type': 'CNAME',
+	# 							 'TTL': 300,
+	# 							 'ResourceRecords': [{'Value': target}]
+	# 						}
+	# 					}]
+	# 	})
+	# except Exception as e:
+	# 	print e
+
+def main(cluster):
+    # build_registry()
+    # create_configmaps()
+    # create_ldap()
+    # create_mailbox()
+    # create_mta()
+    # create_proxy()
+    create_dns_settings(cluster)
 
 
 if __name__ == "__main__":
@@ -157,5 +152,5 @@ if __name__ == "__main__":
     """
     if len(sys.argv) < 2:
         raise SystemExit
-    az = sys.argv[1]
-    main(az)
+    cluster = sys.argv[1]
+    main(cluster)
