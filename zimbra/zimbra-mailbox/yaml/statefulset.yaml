@@ -17,7 +17,7 @@ spec:
        volumeMounts:
        - name: zimbra-volume
          mountPath: /etc/config
-       - name: mailbox-disk
+       - name: mailbox
          mountPath: /opt/zimbra
        env:
        - name: EXT_DOMAIN
@@ -41,16 +41,6 @@ spec:
        - containerPort: 7071
        - containerPort: 8080
        - containerPort: 8443
-     volumeClaimTemplates:
-     - metadata:
-         name: mailbox-disk
-         annotations:
-           volume.alpha.kubernetes.io/storage-class: anything
-         spec:
-           accessModes: [ "ReadWriteOnce" ]
-           resources:
-             requests:
-               storage: 10Gi
      volumes:
      - name: zimbra-volume
        configMap:
@@ -58,5 +48,15 @@ spec:
          items:
          - key: zimbra-properties
            path: zimbra.conf
+     volumeClaimTemplates:
+     - metadata:
+         name: mailbox
+         annotations:
+           volume.alpha.kubernetes.io/storage-class: anything
+         spec:
+           accessModes: [ "ReadWriteOnce" ]
+           resources:
+             requests:
+               storage: 10Gi
      imagePullSecrets:
      - name: myregistrykey
