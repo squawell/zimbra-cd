@@ -114,35 +114,37 @@ def create_proxy():
 def create_dns_settings(cluster):
     client = boto3.client('route53')
 
-    response = client.list_hosted_zones()
-    print response
-	# try:
-	# 	response = client.change_resource_record_sets(
-	# 	HostedZoneId='<hosted zone id>',
-	# 	ChangeBatch= {
-	# 					'Comment': 'add %s -> %s' % (source, target),
-	# 					'Changes': [
-	# 						{
-	# 						 'Action': 'UPSERT',
-	# 						 'ResourceRecordSet': {
-	# 							 'Name': source,
-	# 							 'Type': 'CNAME',
-	# 							 'TTL': 300,
-	# 							 'ResourceRecords': [{'Value': target}]
-	# 						}
-	# 					}]
-	# 	})
-	# except Exception as e:
-	# 	print e
+    response = client.list_hosted_zones_by_name(DNSName='zimbra-k8s.cascadeo.info')
+    if len(response['HostedZones']) > 0:
+        dns = response['HostedZones'].pop()
+        zone = dns['Id'].split('/')[2]
+    	try:
+    		response = client.change_resource_record_sets(
+    		HostedZoneId=zone,
+    		ChangeBatch= {
+    						'Comment': 'add %s -> %s' % (source, target),
+    						'Changes': [
+    							{
+    							 'Action': 'UPSERT',
+    							 'ResourceRecordSet': {
+    								 'Name': source,
+    								 'Type': 'CNAME',
+    								 'TTL': 300,
+    								 'ResourceRecords': [{'Value': target}]
+    							}
+    						}]
+    		})
+    	except Exception as e:
+    		print e
 
 def main(cluster):
-    # build_registry()
-    # create_configmaps()
-    # create_ldap()
-    # create_mailbox()
+    build_registry()
+    create_configmaps()
+    create_ldap()
+    create_mailbox()
     # create_mta()
     # create_proxy()
-    create_dns_settings(cluster)
+    # create_dns_settings(cluster)
 
 
 if __name__ == "__main__":
