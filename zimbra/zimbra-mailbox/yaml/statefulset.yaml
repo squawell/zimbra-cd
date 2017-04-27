@@ -50,11 +50,11 @@ spec:
            path: zimbra.conf
      volumeClaimTemplates:
      - metadata:
-         name: www
+         name: mailbox
        spec:
          accessModes: [ "ReadWriteOnce" ]
          resources:
            requests:
-             storage: 10Gi
+             storage: 1Gi
      imagePullSecrets:
      - name: myregistrykey
