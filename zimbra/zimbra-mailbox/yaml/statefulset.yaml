@@ -55,6 +55,6 @@ spec:
      name: mailbox
    spec:
      accessModes: [ "ReadWriteOnce" ]
-       resources:
-         requests:
-           storage: 10Gi
+     resources:
+       requests:
+         storage: 10Gi
