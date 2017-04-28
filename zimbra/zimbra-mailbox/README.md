@@ -11,5 +11,5 @@
   5. On scaling down, users will be migrated from high to low stateful pod addressing scheme (e.g from mailbox-2 to mailbox-1)
 
 Conclusion:
-  1. From the very start, we can set number of mailboxes
+  1. From the very start, we can define the number of mailboxes
   2. On scaling down, we can manually trigger the above commands

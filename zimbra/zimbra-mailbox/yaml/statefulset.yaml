@@ -48,13 +48,13 @@ spec:
          items:
          - key: zimbra-properties
            path: zimbra.conf
-     volumeClaimTemplates:
-     - metadata:
-         name: mailbox
-       spec:
-         accessModes: [ "ReadWriteOnce" ]
-         resources:
-           requests:
-             storage: 1Gi
      imagePullSecrets:
      - name: myregistrykey
+ volumeClaimTemplates:
+ - metadata:
+     name: mailbox
+   spec:
+     accessModes: [ "ReadWriteOnce" ]
+       resources:
+         requests:
+           storage: 10Gi
