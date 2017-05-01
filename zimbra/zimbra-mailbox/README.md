@@ -12,7 +12,7 @@
 
 ## Testing (Assumption: There is already a running cluster with all zimbra pods running)
 1. Create domain and user on mailbox pod (1 or 2) and send receive email
-  1. kubectl exec -it mailbox-0 -- bash
+	1. kubectl exec -it mailbox-0 -- bash
   2. sudo su zimbra
   3. zmprov cd zimbra-k8s.cascadeo.info
   4. zmprov ca arvin@zimbra-k8s.cascadeo.info test1234 zimbraIsAdminAccount TRUE
