@@ -135,11 +135,6 @@ After doing extra steps above
 	3. kubectl create -f zimbra/configmap/zimbra-mta.yaml
 	4. kubectl create -f zimbra/configmap/zimbra-proxy.yaml
 	5. wait untill AGE is no longer <invalid> then - kubectl get configmaps
-	6. create EBS volumes in availability zone that match the region on aws configure - aws ec2 create-volume --size 10 --availability-zone us-west-2a
-	7. note volume ID from the last command and edit zimbra/persistentvolumes/pv.yaml volumeID value
-	8. kubectl create -f zimbra/persistentvolumes/pv.yaml
-	9. kubectl create -f zimbra/persistentvolumes/pvc.yaml
-	10. kubectl get pv
 4. create zimbra-ldap service
 	1. kubectl create -f zimbra/zimbra-ldap/yaml/internal-ldap-service.yaml
 	2. kubectl create -f zimbra/zimbra-ldap/yaml/statefulset.yaml
