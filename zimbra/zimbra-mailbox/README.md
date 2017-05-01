@@ -11,15 +11,15 @@
   4. On scaling down, users will be migrated from high to low stateful pod addressing scheme (e.g from mailbox-2 to mailbox-1)
 
 ## Testing (Assumption: There is already a running cluster with all zimbra pods running)
-1. Create domain and user on mailbox pod (1 or 2) and send receive email
-	1. kubectl exec -it mailbox-0 -- bash
-  2. sudo su zimbra
-  3. zmprov cd zimbra-k8s.cascadeo.info
-  4. zmprov ca arvin@zimbra-k8s.cascadeo.info test1234 zimbraIsAdminAccount TRUE
-  5. exit from pod (exit)
-  6. kubectl describe service proxy-service-external (run from workstation)
-  7. browse the LoadBalancer endpoint for user from step 1.6 using ssl (https/:443) (e.g. ae6a1ba792bcb11e798cc06d81d932b9-1863829251.us-west-1.elb.amazonaws.com)
-  8. send/receive email from the web interface provided
+  1. Create domain and user on mailbox pod (1 or 2) and send receive email
+    1. kubectl exec -it mailbox-0 -- bash
+    2. sudo su zimbra
+    3. zmprov cd zimbra-k8s.cascadeo.info
+    4. zmprov ca arvin@zimbra-k8s.cascadeo.info test1234 zimbraIsAdminAccount TRUE
+    5. exit from pod (exit)
+    6. kubectl describe service proxy-service-external (run from workstation)
+    7. browse the LoadBalancer endpoint for user from step 1.6 using ssl (https/:443) (e.g. ae6a1ba792bcb11e798cc06d81d932b9-1863829251.us-west-1.elb.amazonaws.com)
+    8. send/receive email from the web interface provided
 2. know what mailbox pod is the user created
   1. back to workstation - kubectl describe service mb-service-2
   2. browse the LoadBalancer endpoint for admin - from ELB endpoint and port (7071) in 1.9
