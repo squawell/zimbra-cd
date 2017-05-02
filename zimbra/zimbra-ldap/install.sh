@@ -32,11 +32,11 @@ cat /etc/hosts
 # /setup_dns.sh
 
 
-INST_FILE=zcs-8.0.2_GA_5569.RHEL6_64.20121210115059.tgz
+INST_FILE=zcs-8.7.7_GA_1787.RHEL6_64.20170410133400.tgz
 echo "Checking zimbra installer for CentOS...${INST_FILE}"
 if [ ! -f /${INST_FILE} ]; then
 	echo "Downloading from source..."
-	wget -O /${INST_FILE} http://files2.zimbra.com/downloads/8.0.2_GA/${INST_FILE}
+	wget -O /${INST_FILE} http://files2.zimbra.com/downloads/8.7.7_GA/${INST_FILE}
 fi
 
 if [ -f /${INST_FILE} ]; then
