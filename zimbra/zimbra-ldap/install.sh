@@ -74,7 +74,6 @@ service rsyslog restart
 
 echo "Fix RED status"
 /opt/zimbra/libexec/zmsyslogsetup
-/etc/init.d/rsyslog restart
 killall -HUP rsyslogd 2> /dev/null || true
 
 echo "Run zmupdatekeys as zimbra"
