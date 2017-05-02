@@ -33,8 +33,8 @@ data:
     LDAPBESSEARCHSET=set
     LDAPHOST="${HOSTNAME}.ldap-service.default.svc.cluster.local"
     LDAPPORT=389
-    LDAPREPLICATIONTYPE=mmr
-    LDAPSERVERID=1
+    LDAPREPLICATIONTYPE=master
+    LDAPSERVERID=2
     MAILBOXDMEMORY=256
     MAILPROXY=TRUE
     MODE=https
@@ -68,6 +68,7 @@ data:
     ZIMBRA_REQ_SECURITY=yes
     ldap_bes_searcher_password="${PASSWORD}"
     ldap_dit_base_dn_config=cn=zimbra
+    ldap_is_master=TRUE
     ldap_nginx_password="${PASSWORD}"
     mailboxd_directory=/opt/zimbra/mailboxd
     mailboxd_keystore=/opt/zimbra/mailboxd/etc/keystore

@@ -72,9 +72,9 @@ cat <<EOF >> /etc/rsyslog.conf
 EOF
 service rsyslog restart
 
-echo "Fix RED status"
-/opt/zimbra/libexec/zmsyslogsetup
-killall -HUP rsyslogd 2> /dev/null || true
+# echo "Fix RED status"
+# /opt/zimbra/libexec/zmsyslogsetup
+# killall -HUP rsyslogd 2> /dev/null || true
 
 echo "Run zmupdatekeys as zimbra"
 su -c /opt/zimbra/bin/zmupdateauthkeys zimbra
