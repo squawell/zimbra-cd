@@ -68,7 +68,7 @@ data:
     ZIMBRA_REQ_SECURITY=yes
     ldap_bes_searcher_password="${PASSWORD}"
     ldap_dit_base_dn_config=cn=zimbra
-    ldap_is_master=TRUE
+    ldap_is_master=true
     ldap_nginx_password="${PASSWORD}"
     mailboxd_directory=/opt/zimbra/mailboxd
     mailboxd_keystore=/opt/zimbra/mailboxd/etc/keystore
