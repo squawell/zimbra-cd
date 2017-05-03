@@ -53,11 +53,12 @@ cat /etc/hosts
 
 echo "Install ZIMBRA"
 
+while true;
 do
 	echo "========================"
 	cd /zcs-* && ./install.sh -s --platform-override < /install_override
 	echo "========================"
-	
+
 	if [ -d "/opt/zimbra" ]; then
 		echo "Zimbra Installed"
   	break
