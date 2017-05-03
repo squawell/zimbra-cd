@@ -53,7 +53,7 @@ cat /etc/hosts
 
 echo "Install ZIMBRA"
 echo "========================"
-cd /zcs-* && ./install.sh -s --platform-override < /all_yes
+cd /zcs-* && ./install.sh --platform-override < /install_override
 echo "========================"
 
 echo "Create zimbra config from configmap"
