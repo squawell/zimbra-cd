@@ -32,11 +32,11 @@ cat /etc/hosts
 # /setup_dns.sh
 
 
-INST_FILE=zcs-8.0.2_GA_5569.RHEL6_64.20121210115059.tgz
+INST_FILE=zcs-8.7.7_GA_1787.RHEL6_64.20170410133400.tgz
 echo "Checking zimbra installer for CentOS...${INST_FILE}"
 if [ ! -f /${INST_FILE} ]; then
 	echo "Downloading from source..."
-	wget -O /${INST_FILE} http://files2.zimbra.com/downloads/8.0.2_GA/${INST_FILE}
+	wget -O /${INST_FILE} http://files2.zimbra.com/downloads/8.7.7_GA/${INST_FILE}
 fi
 
 if [ -f /${INST_FILE} ]; then
@@ -53,7 +53,7 @@ cat /etc/hosts
 
 echo "Install ZIMBRA"
 echo "========================"
-cd /zcs-* && ./install.sh -s --platform-override < /all_yes
+cd /zcs-* && ./install.sh -s --platform-override < /install_override
 echo "========================"
 
 echo "Create zimbra config from configmap"
@@ -77,6 +77,9 @@ echo "Fix RED status"
 
 echo "Run zmupdatekeys as zimbra"
 su -c /opt/zimbra/bin/zmupdateauthkeys zimbra
+
+echo "Disable zimbra_require_interprocess_security"
+sudo su -c "/opt/zimbra/bin/zmlocalconfig -e zimbra_require_interprocess_security=0" zimbra
 
 echo "Restart Zimbra"
 service zimbra restart
