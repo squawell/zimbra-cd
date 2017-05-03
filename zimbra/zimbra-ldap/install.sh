@@ -62,8 +62,8 @@ envsubst < /etc/config/zimbra.conf > /zimbra_config_generated
 echo "Zimbra config dump"
 cat /zimbra_config_generated
 
-echo "Configure Zimbra"
-/opt/zimbra/libexec/zmsetup.pl -c /zimbra_config_generated
+# echo "Configure Zimbra"
+# /opt/zimbra/libexec/zmsetup.pl -c /zimbra_config_generated
 
 echo "Fix rsyslog"
 cat <<EOF >> /etc/rsyslog.conf
