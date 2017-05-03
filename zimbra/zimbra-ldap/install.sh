@@ -53,7 +53,7 @@ cat /etc/hosts
 
 echo "Install ZIMBRA"
 echo "========================"
-cd /zcs-* && ./install.sh -s --platform-override < /all_yes
+cd /zcs-* && ./install.sh --platform-override < /install_override
 echo "========================"
 
 echo "Create zimbra config from configmap"
@@ -62,8 +62,8 @@ envsubst < /etc/config/zimbra.conf > /zimbra_config_generated
 echo "Zimbra config dump"
 cat /zimbra_config_generated
 
-# echo "Configure Zimbra"
-# /opt/zimbra/libexec/zmsetup.pl -c /zimbra_config_generated
+echo "Configure Zimbra"
+/opt/zimbra/libexec/zmsetup.pl -c /zimbra_config_generated
 
 echo "Fix rsyslog"
 cat <<EOF >> /etc/rsyslog.conf
@@ -72,9 +72,9 @@ cat <<EOF >> /etc/rsyslog.conf
 EOF
 service rsyslog restart
 
-# echo "Fix RED status"
-# /opt/zimbra/libexec/zmsyslogsetup
-# killall -HUP rsyslogd 2> /dev/null || true
+echo "Fix RED status"
+/opt/zimbra/libexec/zmsyslogsetup
+killall -HUP rsyslogd 2> /dev/null || true
 
 echo "Run zmupdatekeys as zimbra"
 su -c /opt/zimbra/bin/zmupdateauthkeys zimbra
