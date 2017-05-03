@@ -79,6 +79,10 @@ killall -HUP rsyslogd 2> /dev/null || true
 echo "Run zmupdatekeys as zimbra"
 su -c /opt/zimbra/bin/zmupdateauthkeys zimbra
 
+echo "Update LDAP Password"
+su -c "zmldappasswd -r temp1234" zimbra
+su -c "zmldappasswd temp1234" zimbra
+
 echo "Restart Zimbra"
 service zimbra restart
 
