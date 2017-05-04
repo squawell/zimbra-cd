@@ -52,9 +52,18 @@ echo "Host file"
 cat /etc/hosts
 
 echo "Install ZIMBRA"
-echo "========================"
-cd /zcs-* && ./install.sh -s --platform-override < /all_yes
-echo "========================"
+while true;
+do
+	echo "========================"
+	cd /zcs-* && ./install.sh -s --platform-override < /install_override
+	echo "========================"
+
+	if [ -d "/opt/zimbra/bin" ]; then
+		echo "Zimbra Installed"
+  	break
+	fi
+	echo "reinstalling zimbra!"
+done
 
 echo "Create zimbra config from configmap"
 envsubst < /etc/config/zimbra.conf > /zimbra_config_generated
@@ -77,6 +86,9 @@ echo "Fix RED status"
 
 echo "Run zmupdatekeys as zimbra"
 su -c /opt/zimbra/bin/zmupdateauthkeys zimbra
+
+echo "Disable zimbra_require_interprocess_security"
+sudo su -c "/opt/zimbra/bin/zmlocalconfig -e zimbra_require_interprocess_security=0" zimbra
 
 echo "Restart Zimbra"
 service zimbra restart

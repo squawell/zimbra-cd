@@ -70,10 +70,10 @@ data:
     ldap_dit_base_dn_config=cn=zimbra
     ldap_nginx_password="${PASSWORD}"
     mailboxd_directory=/opt/zimbra/mailboxd
-    mailboxd_keystore=/opt/zimbra/mailboxd/etc/keystore
+    mailboxd_keystore=/opt/zimbra/conf/keystore
     mailboxd_keystore_password="${PASSWORD}"
     mailboxd_server=jetty
-    mailboxd_truststore=/opt/zimbra/java/jre/lib/security/cacerts
+    mailboxd_truststore=/opt/zimbra/common/lib/jvm/java/jre/lib/security/cacerts
     mailboxd_truststore_password=changeit
     postfix_mail_owner=postfix
     postfix_setgid_group=postdrop

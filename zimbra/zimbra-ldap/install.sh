@@ -87,6 +87,8 @@ su -c "/opt/zimbra/bin/zmldappasswd -r ${PASSWORD}" -s /bin/sh zimbra
 su -c "/opt/zimbra/bin/zmldappasswd -a ${PASSWORD}" -s /bin/sh zimbra
 su -c "/opt/zimbra/bin/zmldappasswd -p ${PASSWORD}" -s /bin/sh zimbra
 su -c "/opt/zimbra/bin/zmldappasswd ${PASSWORD}" -s /bin/sh zimbra
+su -c "/opt/zimbra/bin/zmlocalconfig -e ldap_bes_searcher_password=${PASSWORD}" -s /bin/sh zimbra
+su -c "/opt/zimbra/bin/zmlocalconfig -e ldap_nginx_password=${PASSWORD}" -s /bin/sh zimbra
 
 echo "Restart CROND"
 service crond restart
