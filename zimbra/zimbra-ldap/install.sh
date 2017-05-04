@@ -83,8 +83,10 @@ echo "Restart Zimbra"
 service zimbra restart
 
 echo "Update LDAP Password"
-su -c "/opt/zimbra/bin/zmldappasswd -r temp1234" zimbra
-su -c "/opt/zimbra/bin/zmldappasswd temp1234" zimbra
+su -c "/opt/zimbra/bin/zmldappasswd -r ${PASSWORD}" -s /bin/sh zimbra
+su -c "/opt/zimbra/bin/zmldappasswd -a ${PASSWORD}" -s /bin/sh zimbra
+su -c "/opt/zimbra/bin/zmldappasswd -p ${PASSWORD}" -s /bin/sh zimbra
+su -c "/opt/zimbra/bin/zmldappasswd ${PASSWORD}" -s /bin/sh zimbra
 
 echo "Restart CROND"
 service crond restart
