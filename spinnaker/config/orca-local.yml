@@ -36,4 +36,4 @@ redis:
 
 script:
   master: default # name of Jenkins master in Spinnaker
-  job: run-script # from Jenkins job configuration
+  job: run-script-local  # from Jenkins job configuration

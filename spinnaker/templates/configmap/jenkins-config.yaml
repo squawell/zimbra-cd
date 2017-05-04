@@ -10,7 +10,7 @@ data:
     <hudson>
       <disabledAdministrativeMonitors/>
       <version>2.7.3</version>
-      <numExecutors>0</numExecutors>
+      <numExecutors>1</numExecutors>
       <mode>NORMAL</mode>
       <useSecurity>false</useSecurity>
       <authorizationStrategy class="hudson.security.FullControlOnceLoggedInAuthorizationStrategy">
