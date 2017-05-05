@@ -90,6 +90,9 @@ echo "Fix RED status"
 echo "Run zmupdatekeys as zimbra"
 su -c /opt/zimbra/bin/zmupdateauthkeys zimbra
 
+echo "Disable zimbra_require_interprocess_security"
+sudo su -c "/opt/zimbra/bin/zmlocalconfig -e zimbra_require_interprocess_security=0" zimbra
+
 echo "Restart Zimbra"
 service zimbra restart
 
