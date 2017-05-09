@@ -32,4 +32,4 @@ spec:
         command:
         - sh
         - -c
-        - "kubectl delete job {{.Release.Name}}-upload-build-image {{.Release.Name}}-delete-jobs {{.Release.Name}}-upload-run-script"
+        - "kubectl delete job {{.Release.Name}}-upload-build-image {{.Release.Name}}-delete-jobs {{.Release.Name}}-upload-run-script {{.Release.Name}}-upload-run-script-local"
