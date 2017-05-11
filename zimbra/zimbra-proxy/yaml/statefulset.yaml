@@ -39,6 +39,7 @@ spec:
        - containerPort: 7071
        - containerPort: 8080
        - containerPort: 8443
+       - containerPort: 9071
      volumes:
      - name: zimbra-volume
        configMap:

@@ -100,7 +100,7 @@ echo "Restart CROND"
 service crond restart
 
 echo "opening PROXY Ports"
-sudo su -c "/opt/zimbra/libexec/zmproxyconfig -e -w -o -H ${HOSTNAME}.proxy-service.default.svc.cluster.local" -s /bin/sh zimbra
+sudo su -c "/opt/zimbra/libexec/zmproxyconfig -e -w -o -C -H ${HOSTNAME}.proxy-service.default.svc.cluster.local" -s /bin/sh zimbra
 
 echo "Server is ready..."
 if [[ $1 == "-d" ]]; then
