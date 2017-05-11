@@ -90,5 +90,5 @@ data:
     zimbraVersionCheckSendNotifications=TRUE
     zimbraWebProxy="TRUE"
     zimbra_ldap_userdn=uid=zimbra,cn=admins,cn=zimbra
-    zimbra_require_interprocess_security=1
+    zimbra_require_interprocess_security=0
     INSTALL_PACKAGES="zimbra-apache zimbra-core zimbra-ldap zimbra-logger zimbra-memcached zimbra-mta zimbra-proxy zimbra-snmp zimbra-spell zimbra-store "

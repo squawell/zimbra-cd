@@ -88,17 +88,15 @@ echo "Fix RED status"
 echo "Run zmupdatekeys as zimbra"
 su -c /opt/zimbra/bin/zmupdateauthkeys zimbra
 
-echo "Disable zimbra_require_interprocess_security"
-sudo su -c "/opt/zimbra/bin/zmlocalconfig -e zimbra_require_interprocess_security=0" zimbra
+echo "HTTPS Proxy mode"
+sudo su -c "/opt/zimbra/bin/zmprov ms ${HOSTNAME}.mailbox-service.default.svc.cluster.local zimbraReverseProxyMailMode https" -s /bin/sh zimbra
+sudo su -c "/opt/zimbra/libexec/zmproxyconfig -e -w -o -H ${HOSTNAME}.mailbox-service.default.svc.cluster.local" -s /bin/sh zimbra
 
 echo "Restart Zimbra"
-service zimbra restart
+sudo su -c "/opt/zimbra/bin/zmcontrol restart" zimbra
 
 echo "Restart CROND"
 service crond restart
-
-echo "Open PROXY Ports"
-sudo su -c "/opt/zimbra/libexec/zmproxyconfig -e -w -o -H ${HOSTNAME}.mailbox-service.default.svc.cluster.local" -s /bin/sh zimbra
 
 # echo "Register domain zimbra-k8s.cascadeo.info"
 # /opt/zimbra/bin/zmprov cd zimbra-k8s.cascadeo.info
