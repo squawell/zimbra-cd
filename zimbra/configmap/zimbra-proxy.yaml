@@ -17,7 +17,7 @@ data:
     HOSTNAME="${HOSTNAME}.proxy-service.default.svc.cluster.local"
     HTTPPORT=80
     HTTPPROXY="TRUE"
-    HTTPPROXYPORT=8443
+    HTTPPROXYPORT=8080
     HTTPSPORT=443
     HTTPSPROXYPORT=8443
     IMAPPORT=7143
