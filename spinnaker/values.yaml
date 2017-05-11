@@ -58,8 +58,8 @@ minio:
   SecretKey: oMCfz4MsWc7qqc7eM/uq1gV83UWpDGxxxxxxxxx
 
 s3:
-  AccessKey: AKIAJJLHT4K63UPxxxxxx
-  SecretKey: oMCfz4MsWc7qqc7eM/uq1gV83UWpDGxxxxxxxxx
+  AccessKey: AKIAJJLHT4K63UPLLJNA
+  SecretKey: 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
 
 # Configuration for the Jenkins instance that is attached to the
 # igor component of Spinnaker. For more info about the Jenkins integration

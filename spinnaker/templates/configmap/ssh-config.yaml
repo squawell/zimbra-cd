@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-ssh-config
+  labels:
+    app: {{ template "fullname" . }}
+data:
+  ssh-config: |-
+    Host github.com
+      User git
+      IdentityFile /var/jenkins_home/deploy-key/ssh-privatekey
+
