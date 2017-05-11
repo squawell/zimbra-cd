@@ -27,10 +27,6 @@ spec:
                       {
                           "name": "jenkins-home",
                           "mountPath": "/var/jenkins_home"
-                      },
-                      {
-                          "name": "ssh-config",
-                          "mountPath": "/var/jenkins_home/.ssh/config"
                       }
                   ]
               }
@@ -72,6 +68,8 @@ spec:
               readOnly: true
             - mountPath: /var/jenkins_home
               name: jenkins-home
+            - mountPath: /var/jenkins_home/.ssh
+              name: ssh-config
             - mountPath: /usr/local/bin/kubectl
               name: kubectl
       volumes:
@@ -90,6 +88,9 @@ spec:
       - name: ssh-config
         configMap:
           name: {{ .Release.Name }}-ssh-config
+          items:
+          - key: ssh-config
+            path: config
       - name: {{ template "fullname" . }}-spinnaker-config
         configMap:
           name: {{ template "fullname" . }}-spinnaker-config
