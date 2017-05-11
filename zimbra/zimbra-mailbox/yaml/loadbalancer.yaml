@@ -10,5 +10,8 @@ spec:
    - name: client-port
      port: 443
      targetPort: 443
+   - name: client-port-ssl
+     port: 8443
+     targetPort: 8443
  selector:
    app: mailbox
