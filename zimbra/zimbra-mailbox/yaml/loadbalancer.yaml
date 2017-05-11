@@ -10,8 +10,5 @@ spec:
    - name: client-port
      port: 443
      targetPort: 443
-   - name: client-port-2
-     port: 8080
-     targetPort: 8080
  selector:
    app: mailbox
