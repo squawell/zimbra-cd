@@ -17,7 +17,8 @@ spec:
               {
                   "name": "copy-default-config",
                   "image": "{{.Values.jenkins.Master.Image}}:{{.Values.jenkins.Master.ImageTag}}",
-                  "command": ["cp", "-n", "/var/jenkins_config/config.xml", "/var/jenkins_home"],
+                  "command": ["/bin/sh", "-c"],
+                  "args": ["cp -n /var/jenkins_config/config.xml /var/jenkins_home && cp -R /var/ssh_config/.ssh /var/jenkins_home && cp /var/git_deploy/ssh-privatekey /var/jenkins_home && chmod 600 /var/jenkins_home/ssh-privatekey"],
                   "imagePullPolicy": "IfNotPresent",
                   "volumeMounts": [
                       {
@@ -27,6 +28,14 @@ spec:
                       {
                           "name": "jenkins-home",
                           "mountPath": "/var/jenkins_home"
+                      },
+                      {
+                          "mountPath": "/var/ssh_config/.ssh",
+                          "name": "ssh-config"
+                      },
+                      {
+                          "mountPath": "/var/git_deploy",
+                          "name": "git-deploy"
                       }
                   ]
               }
@@ -63,20 +72,14 @@ spec:
               cpu: "{{.Values.jenkins.Master.Cpu}}"
               memory: "{{.Values.jenkins.Master.Memory}}"
           volumeMounts:
-            - mountPath: /var/jenkins_home/deploy-key
-              name: git-deploy
-              readOnly: true
             - mountPath: /var/jenkins_home
               name: jenkins-home
-            - mountPath: /var/jenkins_home/.ssh
-              name: ssh-config
             - mountPath: /usr/local/bin/kubectl
               name: kubectl
       volumes:
       - name: git-deploy
         secret:
           secretName: git-repo
-          defaultMode: 384
       - name: kubectl
         hostPath:
           path: /usr/local/bin/kubectl

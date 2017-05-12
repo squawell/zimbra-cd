@@ -8,5 +8,7 @@ data:
   ssh-config: |-
     Host github.com
       User git
-      IdentityFile /var/jenkins_home/deploy-key/ssh-privatekey
+      IdentityFile /var/jenkins_home/ssh-privatekey
+      StrictHostKeyChecking no
+      UserKnownHostsFile=/dev/null
 
