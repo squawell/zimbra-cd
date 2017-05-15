@@ -17,5 +17,7 @@ spec:
      port: 993
    - name: zimbra-port-7071
      port: 7071
+   - name: zimbra-port-9071
+     port: 9071
  selector:
    app: proxy

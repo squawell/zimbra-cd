@@ -142,8 +142,8 @@ def main(cluster):
     create_configmaps()
     create_ldap()
     create_mailbox()
-    # create_mta()
-    # create_proxy()
+    create_mta()
+    create_proxy()
     # create_dns_settings(cluster)
 
 

@@ -26,9 +26,6 @@ spec:
     port: 8080
   - name: mailbox-port-8443
     port: 8443
-    protocol: TCP
-  - name: mailbox-port-9071
-    port: 9071
   clusterIP: None
   selector:
     app: mailbox

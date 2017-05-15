@@ -31,7 +31,7 @@ data:
     LDAPADMINPASS="${PASSWORD}"
     LDAPREPPASS="${PASSWORD}"
     LDAPBESSEARCHSET=set
-    LDAPHOST="${HOSTNAME}.ldap-service.default.svc.cluster.local"
+    LDAPHOST="ldap://${HOSTNAME}.ldap-service.default.svc.cluster.local"
     LDAPPORT=389
     LDAPREPLICATIONTYPE=master
     LDAPSERVERID=2
@@ -68,12 +68,13 @@ data:
     ZIMBRA_REQ_SECURITY=yes
     ldap_bes_searcher_password="${PASSWORD}"
     ldap_dit_base_dn_config=cn=zimbra
+    ldap_is_master=true
     ldap_nginx_password="${PASSWORD}"
     mailboxd_directory=/opt/zimbra/mailboxd
     mailboxd_keystore=/opt/zimbra/mailboxd/etc/keystore
     mailboxd_keystore_password="${PASSWORD}"
     mailboxd_server=jetty
-    mailboxd_truststore=/opt/zimbra/java/jre/lib/security/cacerts
+    mailboxd_truststore=/opt/zimbra/common/lib/jvm/java/jre/lib/security/cacerts
     mailboxd_truststore_password=changeit
     postfix_mail_owner=postfix
     postfix_setgid_group=postdrop

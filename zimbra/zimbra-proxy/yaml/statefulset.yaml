@@ -4,7 +4,7 @@ metadata:
  name: proxy
 spec:
  serviceName: proxy-service
- replicas: 4
+ replicas: 1
  template:
    metadata:
      labels:
@@ -39,6 +39,7 @@ spec:
        - containerPort: 7071
        - containerPort: 8080
        - containerPort: 8443
+       - containerPort: 9071
      volumes:
      - name: zimbra-volume
        configMap:

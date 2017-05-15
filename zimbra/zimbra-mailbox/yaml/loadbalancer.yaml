@@ -7,8 +7,14 @@ spec:
    - name: admin-port
      port: 7071
      targetPort: 7071
-   - name: cleint-port
+   - name: client-port
      port: 443
      targetPort: 443
+   - name: client-port-ssl
+     port: 8443
+     targetPort: 8443
+   - name: client-port-ssl-1
+     port: 8080
+     targetPort: 8080
  selector:
    app: mailbox

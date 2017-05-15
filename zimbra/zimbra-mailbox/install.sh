@@ -32,11 +32,11 @@ cat /etc/hosts
 # /setup_dns.sh
 
 
-INST_FILE=zcs-8.0.2_GA_5569.RHEL6_64.20121210115059.tgz
+INST_FILE=zcs-8.7.7_GA_1787.RHEL6_64.20170410133400.tgz
 echo "Checking zimbra installer for CentOS...${INST_FILE}"
 if [ ! -f /${INST_FILE} ]; then
 	echo "Downloading from source..."
-	wget -O /${INST_FILE} http://files2.zimbra.com/downloads/8.0.2_GA/${INST_FILE}
+	wget -O /${INST_FILE} http://files2.zimbra.com/downloads/8.7.7_GA/${INST_FILE}
 fi
 
 if [ -f /${INST_FILE} ]; then
@@ -52,9 +52,19 @@ echo "Host file"
 cat /etc/hosts
 
 echo "Install ZIMBRA"
-echo "========================"
-cd /zcs-* && ./install.sh -s --platform-override < /all_yes
-echo "========================"
+
+while true;
+do
+	echo "========================"
+	cd /zcs-* && ./install.sh -s --platform-override < /install_override
+	echo "========================"
+
+	if [ -d "/opt/zimbra/bin" ]; then
+		echo "Zimbra Installed"
+  	break
+	fi
+	echo "reinstalling zimbra!"
+done
 
 echo "Create zimbra config from configmap"
 envsubst < /etc/config/zimbra.conf > /zimbra_config_generated
@@ -78,14 +88,15 @@ echo "Fix RED status"
 echo "Run zmupdatekeys as zimbra"
 su -c /opt/zimbra/bin/zmupdateauthkeys zimbra
 
+echo "HTTPS Proxy mode"
+sudo su -c "/opt/zimbra/bin/zmprov ms ${HOSTNAME}.mailbox-service.default.svc.cluster.local zimbraReverseProxyMailMode https" -s /bin/sh zimbra
+sudo su -c "/opt/zimbra/libexec/zmproxyconfig -e -w -o -H ${HOSTNAME}.mailbox-service.default.svc.cluster.local" -s /bin/sh zimbra
+
 echo "Restart Zimbra"
-service zimbra restart
+sudo su -c "/opt/zimbra/bin/zmcontrol restart" zimbra
 
 echo "Restart CROND"
 service crond restart
-
-echo "Open PROXY Ports"
-sudo su -c "/opt/zimbra/libexec/zmproxyconfig -e -w -o -H ${HOSTNAME}.mailbox-service.default.svc.cluster.local" -s /bin/sh zimbra
 
 # echo "Register domain zimbra-k8s.cascadeo.info"
 # /opt/zimbra/bin/zmprov cd zimbra-k8s.cascadeo.info
