@@ -5,26 +5,30 @@ import glob
 import boto3
 import time
 
+path = os.path.dirname(__file__)
+
 def build_registry():
     print "Building Registry..."
 
     os.system('aws ecr get-login | sh -')
     hashed_auth = os.system('cat ~/.docker/config.json | base64 -w 0')
 
-    with open("myregistry.yaml", 'rw') as f:
+    reg_path = "%s/myregistry.yaml" % path
+
+    with open(reg_path, 'rw') as f:
         doc = yaml.load(f)
         doc['data']['.dockerconfigjson'] = hashed_auth
         yaml.dump(f)
 
     os.system('kubectl delete secret myregistrykey')
-    secrets = os.system('kubectl create -f myregistry.yaml')
+    secrets = os.system("kubectl create -f %s" % reg_path)
     print secrets
     print "Registry Build Done!"
 
 def create_configmaps():
     print "Creating Configmaps..."
 
-    for file in glob.glob("configmap/*.yaml"):
+    for file in glob.glob("%s/configmap/*.yaml" % path):
         cmd = 'kubectl create -f ' + str(file)
         os.system(cmd)
 
@@ -35,9 +39,11 @@ def create_configmaps():
 def create_ldap():
     print "Creating LDAP service..."
 
-    os.system('kubectl create -f zimbra-ldap/yaml/internal-ldap-service.yaml')
+    ldap_path = "%s/zimbra-ldap/yaml" % path
+
+    os.system("kubectl create -f %s/internal-ldap-service.yaml" % ldap_path)
     print "Internal LDAP service created..."
-    os.system('kubectl create -f zimbra-ldap/yaml/statefulset.yaml')
+    os.system("kubectl create -f %s/statefulset.yaml" % ldap_path)
 
     is_ready = False
     while not is_ready:
@@ -48,15 +54,17 @@ def create_ldap():
             time.sleep(10)
 
     print "Statefulset service created..."
-    os.system('kubectl create -f zimbra-ldap/yaml/external-ldap-service.yaml')
+    os.system("kubectl create -f %s/external-ldap-service.yaml" % ldap_path)
     print "External LDAP service created..."
 
 def create_mailbox():
     print "Creating MAILBOX service..."
 
-    os.system('kubectl create -f zimbra-mailbox/yaml/internal-mailbox-service.yaml')
+    mailbox_path = "%s/zimbra-mailbox/yaml" % path
+
+    os.system("kubectl create -f %s/internal-mailbox-service.yaml" % mailbox_path)
     print "Internal MAILBOX service created..."
-    os.system('kubectl create -f zimbra-mailbox/yaml/statefulset.yaml')
+    os.system("kubectl create -f %s/statefulset.yaml" % mailbox_path)
 
     is_ready = False
     while not is_ready:
@@ -67,18 +75,20 @@ def create_mailbox():
             time.sleep(10)
 
     print "Statefulset service created..."
-    os.system('kubectl create -f zimbra-mailbox/yaml/external-mailbox-service.yaml')
+    os.system("kubectl create -f %s/external-mailbox-service.yaml" % mailbox_path)
     print "External mailbox service created..."
-    os.system('kubectl create -f zimbra-mailbox/yaml/client-service.yaml')
-    os.system('kubectl create -f zimbra-mailbox/yaml/loadbalancer.yaml')
+    os.system("kubectl create -f %s/client-service.yaml" % mailbox_path)
+    os.system("kubectl create -f %s/loadbalancer.yaml" % mailbox_path)
     print "loadbalancer service created..."
 
 def create_mta():
     print "Creating MTA service..."
 
-    os.system('kubectl create -f zimbra-mta/yaml/internal-mta-service.yaml')
+    mta_path = "%s/zimbra-mta/yaml" % path
+
+    os.system("kubectl create -f %s/internal-mta-service.yaml" % mta_path)
     print "Internal MTA service created..."
-    os.system('kubectl create -f zimbra-mta/yaml/statefulset.yaml')
+    os.system("kubectl create -f %s/statefulset.yaml" % mta_path)
 
     is_ready = False
     while not is_ready:
@@ -89,15 +99,17 @@ def create_mta():
             time.sleep(10)
 
     print "Statefulset service created..."
-    os.system('kubectl create -f zimbra-mta/yaml/external-mta-service.yaml')
+    os.system("kubectl create -f %s/external-mta-service.yaml" % mta_path)
     print "External MTA service created..."
 
 def create_proxy():
     print "Creating PROXY service..."
 
-    os.system('kubectl create -f zimbra-proxy/yaml/internal-proxy-service.yaml')
+    proxy_path = "%s/zimbra-proxy/yaml" % path
+
+    os.system("kubectl create -f %s/internal-proxy-service.yaml" % proxy_path)
     print "Internal PROXY service created..."
-    os.system('kubectl create -f zimbra-proxy/yaml/statefulset.yaml')
+    os.system("kubectl create -f %s/statefulset.yaml" % proxy_path)
 
     is_ready = False
     while not is_ready:
@@ -108,7 +120,7 @@ def create_proxy():
             time.sleep(10)
 
     print "Statefulset service created..."
-    os.system('kubectl create -f zimbra-proxy/yaml/external-proxy-service.yaml')
+    os.system("kubectl create -f %s/external-proxy-service.yaml" % proxy_path)
     print "External PROXY service created..."
 
 def create_dns_settings(cluster):
