@@ -7,6 +7,20 @@ import time
 
 path = os.path.dirname(__file__)
 
+def update_yaml_release(release):
+    print "Updating yaml files for release %s..." % release
+
+    yfiles = ['zimbra-ldap', 'zimbra-mailbox', 'zimbra-mta', 'zimbra-proxy']
+      
+    for yf in yfiles:
+        for y in glob.glob("%s/%s/yaml/*.yaml" %(path, yf)):
+            print "Updating " + str(y)
+            with open(y, 'r+') as f:
+              doc = yaml.load(f)
+              doc['metadata']['name'] += "-%s" % release
+              yaml.dump(doc, f)
+
+
 def build_registry():
     print "Building Registry..."
 
@@ -15,10 +29,10 @@ def build_registry():
 
     reg_path = "%s/myregistry.yaml" % path
 
-    with open(reg_path, 'rw') as f:
+    with open(reg_path, 'r+') as f:
         doc = yaml.load(f)
         doc['data']['.dockerconfigjson'] = hashed_auth
-        yaml.dump(f)
+        yaml.dump(doc, f)
 
     os.system('kubectl delete secret myregistrykey')
     secrets = os.system("kubectl create -f %s" % reg_path)
@@ -28,8 +42,8 @@ def build_registry():
 def create_configmaps():
     print "Creating Configmaps..."
 
-    for file in glob.glob("%s/configmap/*.yaml" % path):
-        cmd = 'kubectl create -f ' + str(file)
+    for f in glob.glob("%s/configmap/*.yaml" % path):
+        cmd = 'kubectl create -f ' + str(f)
         os.system(cmd)
 
     configmaps = os.system("kubectl get configmaps")
@@ -149,7 +163,8 @@ def create_dns_settings(cluster):
     	except Exception as e:
     		print e
 
-def main(cluster):
+def main(cluster, release):
+    update_yaml_release(release)
     build_registry()
     create_configmaps()
     create_ldap()
@@ -162,9 +177,12 @@ def main(cluster):
 if __name__ == "__main__":
     """
     Setup.py arguments
-    python setup.py [availabilityzone]
+    python setup.py [availabilityzone] [releasename]
     """
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 3:
+        print "Usage: python setup.py [availabilityzone] [releasename]"
         raise SystemExit
+
     cluster = sys.argv[1]
-    main(cluster)
+    release = sys.argv[2]
+    main(cluster, release)
