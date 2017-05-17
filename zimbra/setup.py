@@ -14,11 +14,18 @@ def update_yaml_release(release):
       
     for yf in yfiles:
         for y in glob.glob("%s/%s/yaml/*.yaml" %(path, yf)):
-            print "Updating " + str(y)
             with open(y, 'r+') as f:
               doc = yaml.load(f)
               doc['metadata']['name'] += "-%s" % release
-              yaml.dump(doc, f)
+
+            outdir = "%s/%s/yaml/%s" %(path, yf, release)
+            if not os.path.exists(outdir):
+                os.makedirs(outdir)
+
+            outy = str(y).replace("yaml/", "yaml/%s/" % release)
+            print "Creating " + outy
+            with open(outy, 'w') as of:
+              yaml.dump(doc, of)
 
 
 def build_registry():
@@ -50,10 +57,10 @@ def create_configmaps():
     print configmaps
     print "Configmaps Created"
 
-def create_ldap():
+def create_ldap(release):
     print "Creating LDAP service..."
 
-    ldap_path = "%s/zimbra-ldap/yaml" % path
+    ldap_path = "%s/zimbra-ldap/yaml/%s" %(path, release)
 
     os.system("kubectl create -f %s/internal-ldap-service.yaml" % ldap_path)
     print "Internal LDAP service created..."
@@ -71,10 +78,10 @@ def create_ldap():
     os.system("kubectl create -f %s/external-ldap-service.yaml" % ldap_path)
     print "External LDAP service created..."
 
-def create_mailbox():
+def create_mailbox(release):
     print "Creating MAILBOX service..."
 
-    mailbox_path = "%s/zimbra-mailbox/yaml" % path
+    mailbox_path = "%s/zimbra-mailbox/yaml/%s" %(path, release)
 
     os.system("kubectl create -f %s/internal-mailbox-service.yaml" % mailbox_path)
     print "Internal MAILBOX service created..."
@@ -95,10 +102,10 @@ def create_mailbox():
     os.system("kubectl create -f %s/loadbalancer.yaml" % mailbox_path)
     print "loadbalancer service created..."
 
-def create_mta():
+def create_mta(release):
     print "Creating MTA service..."
 
-    mta_path = "%s/zimbra-mta/yaml" % path
+    mta_path = "%s/zimbra-mta/yaml/%s" %(path, release)
 
     os.system("kubectl create -f %s/internal-mta-service.yaml" % mta_path)
     print "Internal MTA service created..."
@@ -116,10 +123,10 @@ def create_mta():
     os.system("kubectl create -f %s/external-mta-service.yaml" % mta_path)
     print "External MTA service created..."
 
-def create_proxy():
+def create_proxy(release):
     print "Creating PROXY service..."
 
-    proxy_path = "%s/zimbra-proxy/yaml" % path
+    proxy_path = "%s/zimbra-proxy/yaml/%s" %(path, release)
 
     os.system("kubectl create -f %s/internal-proxy-service.yaml" % proxy_path)
     print "Internal PROXY service created..."
@@ -167,10 +174,10 @@ def main(cluster, release):
     update_yaml_release(release)
     build_registry()
     create_configmaps()
-    create_ldap()
-    create_mailbox()
-    create_mta()
-    create_proxy()
+    create_ldap(release)
+    create_mailbox(release)
+    create_mta(release)
+    create_proxy(release)
     # create_dns_settings(cluster)
 
 
