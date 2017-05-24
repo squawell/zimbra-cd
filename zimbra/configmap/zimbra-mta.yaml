@@ -1,7 +1,6 @@
 kind: ConfigMap
 metadata:
   name: zimbra-mta
-  namespace: default
 apiVersion: v1
 data:
   zimbra-properties: |

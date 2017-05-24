@@ -7,28 +7,32 @@ import time
 
 path = os.path.dirname(__file__)
 
-def update_yaml_release(release):
-    print "Updating yaml files for release %s..." % release
-
+def update_yaml_release(namespace):
+    print "Updating yaml files for release %s..." %(namespace)
     yfiles = ['zimbra-ldap', 'zimbra-mailbox', 'zimbra-mta', 'zimbra-proxy']
       
     for yf in yfiles:
         for y in glob.glob("%s/%s/yaml/*.yaml" %(path, yf)):
             with open(y, 'r+') as f:
+              print "Checking %s..." % y
               doc = yaml.load(f)
-              doc['metadata']['name'] += "-%s" % release
 
-            outdir = "%s/%s/yaml/%s" %(path, yf, release)
+              if 'labels' not in doc['metadata']:
+                doc['metadata']['labels'] = {}
+
+              doc['metadata']['labels']['release'] = namespace
+
+            outdir = "%s/%s/yaml/%s" %(path, yf, namespace)
             if not os.path.exists(outdir):
                 os.makedirs(outdir)
 
-            outy = str(y).replace("yaml/", "yaml/%s/" % release)
+            outy = str(y).replace("yaml/", "yaml/%s/" %(namespace))
             print "Creating " + outy
             with open(outy, 'w') as of:
               yaml.dump(doc, of)
 
 
-def build_registry():
+def build_registry(namespace):
     print "Building Registry..."
 
     os.system('aws ecr get-login | sh -')
@@ -42,106 +46,112 @@ def build_registry():
         yaml.dump(doc, f)
 
     os.system('kubectl delete secret myregistrykey')
-    secrets = os.system("kubectl create -f %s" % reg_path)
+    secrets = os.system("kubectl create -n %s -f %s" %(namespace, reg_path))
     print secrets
     print "Registry Build Done!"
 
-def create_configmaps():
+
+def create_namespace(namespace):
+    os.system("kubectl create ns %s 2> /dev/null" % namespace)
+    print os.system("kubectl describe ns %s" % namespace)
+
+
+def create_configmaps(namespace):
     print "Creating Configmaps..."
 
     for f in glob.glob("%s/configmap/*.yaml" % path):
-        cmd = 'kubectl create -f ' + str(f)
+        cmd = "kubectl create -n %s -f %s" %(namespace,  str(f))
         os.system(cmd)
 
     configmaps = os.system("kubectl get configmaps")
     print configmaps
     print "Configmaps Created"
 
-def create_ldap(release):
+def create_ldap(namespace):
     print "Creating LDAP service..."
 
-    ldap_path = "%s/zimbra-ldap/yaml/%s" %(path, release)
+    ldap_path = "%s/zimbra-ldap/yaml/%s" %(path, namespace)
 
-    os.system("kubectl create -f %s/internal-ldap-service.yaml" % ldap_path)
+    os.system("kubectl create -n %s -f %s/internal-ldap-service.yaml" %(namespace, ldap_path))
     print "Internal LDAP service created..."
-    os.system("kubectl create -f %s/statefulset.yaml" % ldap_path)
+    os.system("kubectl create -n %s  -f %s/statefulset.yaml" %(namespace, ldap_path))
 
     is_ready = False
     while not is_ready:
-        grep = os.system('kubectl logs ldap-0 | grep "Server is ready"')
+        grep = os.system("kubectl logs -n %s ldap-0 | grep 'Server is ready'" % namespace)
         if grep == 0:
             is_ready = True
         else:
             time.sleep(10)
 
     print "Statefulset service created..."
-    os.system("kubectl create -f %s/external-ldap-service.yaml" % ldap_path)
+    os.system("kubectl create -n %s -f %s/external-ldap-service.yaml" %(namespace, ldap_path))
     print "External LDAP service created..."
 
-def create_mailbox(release):
+def create_mailbox(namespace):
     print "Creating MAILBOX service..."
 
-    mailbox_path = "%s/zimbra-mailbox/yaml/%s" %(path, release)
+    mailbox_path = "%s/zimbra-mailbox/yaml/%s" %(path, namespace)
 
-    os.system("kubectl create -f %s/internal-mailbox-service.yaml" % mailbox_path)
+    os.system("kubectl create -n %s -f %s/internal-mailbox-service.yaml" %(namespace, mailbox_path))
     print "Internal MAILBOX service created..."
-    os.system("kubectl create -f %s/statefulset.yaml" % mailbox_path)
+    os.system("kubectl create -n %s -f %s/statefulset.yaml" %(namespace, mailbox_path))
 
     is_ready = False
     while not is_ready:
-        grep = os.system('kubectl logs mailbox-0 | grep "Server is ready"')
+        grep = os.system("kubectl logs -n %s mailbox-0 | grep 'Server is ready'" % namespace)
         if grep == 0:
             is_ready = True
         else:
             time.sleep(10)
 
     print "Statefulset service created..."
-    os.system("kubectl create -f %s/external-mailbox-service.yaml" % mailbox_path)
+    os.system("kubectl create -n %s -f %s/external-mailbox-service.yaml" %(namespace, mailbox_path))
     print "External mailbox service created..."
-    os.system("kubectl create -f %s/client-service.yaml" % mailbox_path)
-    os.system("kubectl create -f %s/loadbalancer.yaml" % mailbox_path)
+    os.system("kubectl create -n %s -f %s/client-service.yaml" %(namespace, mailbox_path))
+    os.system("kubectl create -n %s -f %s/loadbalancer.yaml" %(namespace, mailbox_path))
     print "loadbalancer service created..."
 
-def create_mta(release):
+def create_mta(namespace):
     print "Creating MTA service..."
 
-    mta_path = "%s/zimbra-mta/yaml/%s" %(path, release)
+    mta_path = "%s/zimbra-mta/yaml/%s" %(path, namespace)
 
-    os.system("kubectl create -f %s/internal-mta-service.yaml" % mta_path)
+    os.system("kubectl create -n %s -f %s/internal-mta-service.yaml" %(namespace, mta_path))
     print "Internal MTA service created..."
-    os.system("kubectl create -f %s/statefulset.yaml" % mta_path)
+    os.system("kubectl create -n %s -f %s/statefulset.yaml" %(namespace, mta_path))
 
     is_ready = False
     while not is_ready:
-        grep = os.system('kubectl logs mta-0 | grep "Server is ready"')
+        grep = os.system("kubectl logs -n %s mta-0 | grep 'Server is ready'" % namespace)
         if grep == 0:
             is_ready = True
         else:
             time.sleep(10)
 
     print "Statefulset service created..."
-    os.system("kubectl create -f %s/external-mta-service.yaml" % mta_path)
+    os.system("kubectl create -n %s -f %s/external-mta-service.yaml" %(namespace, mta_path))
     print "External MTA service created..."
 
-def create_proxy(release):
+def create_proxy(namespace):
     print "Creating PROXY service..."
 
-    proxy_path = "%s/zimbra-proxy/yaml/%s" %(path, release)
+    proxy_path = "%s/zimbra-proxy/yaml/%s" %(path, namespace)
 
-    os.system("kubectl create -f %s/internal-proxy-service.yaml" % proxy_path)
+    os.system("kubectl create -n %s -f %s/internal-proxy-service.yaml" %(namespace, proxy_path))
     print "Internal PROXY service created..."
-    os.system("kubectl create -f %s/statefulset.yaml" % proxy_path)
+    os.system("kubectl create -n %s -f %s/statefulset.yaml" %(namespace, proxy_path))
 
     is_ready = False
     while not is_ready:
-        grep = os.system('kubectl logs proxy-0 | grep "Server is ready"')
+        grep = os.system("kubectl logs -n %s proxy-0 | grep 'Server is ready'" % namespace)
         if grep == 0:
             is_ready = True
         else:
             time.sleep(10)
 
     print "Statefulset service created..."
-    os.system("kubectl create -f %s/external-proxy-service.yaml" % proxy_path)
+    os.system("kubectl create -n %s -f %s/external-proxy-service.yaml" %(namespace, proxy_path))
     print "External PROXY service created..."
 
 def create_dns_settings(cluster):
@@ -170,26 +180,31 @@ def create_dns_settings(cluster):
     	except Exception as e:
     		print e
 
-def main(cluster, release):
-    update_yaml_release(release)
-    build_registry()
-    create_configmaps()
-    create_ldap(release)
-    create_mailbox(release)
-    create_mta(release)
-    create_proxy(release)
-    # create_dns_settings(cluster)
+def main(zone, namespace):
+    update_yaml_release(namespace)
+    create_namespace(namespace)
+
+    build_registry(namespace)
+    create_configmaps(namespace)
+    create_ldap(namespace)
+    create_mailbox(namespace)
+    create_mta(namespace)
+    create_proxy(namespace)
+    # create_dns_settings(zone)
 
 
 if __name__ == "__main__":
     """
     Setup.py arguments
-    python setup.py [availabilityzone] [releasename]
+    python setup.py [availabilityzone] [environment] [releasename]
     """
-    if len(sys.argv) < 3:
-        print "Usage: python setup.py [availabilityzone] [releasename]"
+    if len(sys.argv) < 4:
+        print "Usage: python setup.py [availabilityzone] [environment] [releasename]"
         raise SystemExit
 
-    cluster = sys.argv[1]
-    release = sys.argv[2]
-    main(cluster, release)
+    zone = sys.argv[1]
+    environment = sys.argv[2]
+    release = sys.argv[3]
+
+    namespace = "%s-%s" %(environment, release)
+    main(zone, namespace)

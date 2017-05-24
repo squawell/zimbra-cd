@@ -1,7 +1,6 @@
 kind: ConfigMap
 metadata:
   name: zimbra-mailbox
-  namespace: default
 apiVersion: v1
 data:
   zimbra-properties: |
