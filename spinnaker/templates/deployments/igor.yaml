@@ -57,7 +57,7 @@ spec:
             initialDelaySeconds: 20
             timeoutSeconds: 1
         - name: jenkins-master
-          image: "{{.Values.jenkins.Master.Image}}:{{.Values.jenkins.Master.ImageTag}}"
+          image: "quay.io/lbustamante/jenkins-master-k8s:v0.6.1"
           imagePullPolicy: "{{.Values.jenkins.Master.ImagePullPolicy}}"
           env:
             - name: JAVA_OPTS
