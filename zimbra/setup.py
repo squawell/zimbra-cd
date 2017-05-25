@@ -43,7 +43,7 @@ def build_registry(namespace):
     with open(reg_path, 'r+') as f:
         doc = yaml.load(f)
         doc['data']['.dockerconfigjson'] = hashed_auth
-        yaml.dump(doc, f)
+        #yaml.dump(doc, f)
 
     os.system('kubectl delete secret myregistrykey')
     secrets = os.system("kubectl create -n %s -f %s" %(namespace, reg_path))
