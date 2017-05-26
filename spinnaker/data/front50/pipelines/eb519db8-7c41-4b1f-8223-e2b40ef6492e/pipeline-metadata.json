@@ -1,0 +1,49 @@
+{
+  "keepWaitingPipelines" : false,
+  "parameterConfig" : [ {
+    "name" : "RELEASE",
+    "description" : "Release name",
+    "default" : "20170522"
+  }, {
+    "name" : "ENVIRONMENT",
+    "description" : "Environment",
+    "default" : "dev"
+  }, {
+    "name" : "REGION",
+    "description" : "AWS region",
+    "default" : "us-west-2"
+  }, {
+    "name" : "REPO",
+    "description" : "Git repo",
+    "default" : "git@github.com:cascadeo/synacor.git"
+  } ],
+  "lastModifiedBy" : "anonymous",
+  "index" : 0,
+  "triggers" : [ ],
+  "executionEngine" : "v2",
+  "limitConcurrent" : true,
+  "application" : "zimbra",
+  "parallel" : true,
+  "name" : "Deploy Zimbra",
+  "stages" : [ {
+    "refId" : "1",
+    "requisiteStageRefIds" : [ ],
+    "type" : "script",
+    "name" : "Pull from repo",
+    "failPipeline" : true,
+    "waitForCompletion" : true,
+    "user" : "[anonymous]",
+    "command" : "git clone ${parameters.REPO} /tmp/synacor_${parameters.ENVIRONMENT}-${parameters.RELEASE}"
+  }, {
+    "refId" : "2",
+    "requisiteStageRefIds" : [ "1" ],
+    "type" : "script",
+    "name" : "Run deploy script",
+    "failPipeline" : true,
+    "waitForCompletion" : true,
+    "user" : "[anonymous]",
+    "command" : "python /tmp/synacor_${parameters.ENVIRONMENT}-${parameters.RELEASE}/zimbra/setup.py ${parameters.REGION} ${parameters.ENVIRONMENT} ${parameters.RELEASE}"
+  } ],
+  "id" : "eb519db8-7c41-4b1f-8223-e2b40ef6492e",
+  "updateTs" : "1495805326000"
+}

@@ -1,0 +1,13 @@
+{
+  "name" : "ZIMBRA",
+  "description" : null,
+  "email" : "leo@cascadeo.com",
+  "accounts" : "local,dockerhub",
+  "updateTs" : "1495805248000",
+  "createTs" : "1495805247360",
+  "lastModifiedBy" : "anonymous",
+  "instancePort" : null,
+  "cloudProviders" : "kubernetes",
+  "user" : "[anonymous]",
+  "requiredGroupMembership" : [ ]
+}
