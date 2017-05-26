@@ -54,12 +54,12 @@ redis:
 # Minio access/secret keys for the in-cluster S3 usage
 # Minio is not exposed publically
 minio:
-  AccessKey: AKIAJJLHT4K63UPxxxxxx
-  SecretKey: oMCfz4MsWc7qqc7eM/uq1gV83UWpDGxxxxxxxxx
+  AccessKey: AKIAJJLHT4K63UPLLJNA
+  SecretKey: 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
 
 s3:
-  AccessKey: AKIAJJLHT4K63UPxxxxxx
-  SecretKey: oMCfz4MsWc7qqc7eM/uq1gV83UWpDGxxxxxxxxx
+  AccessKey: AKIAJJLHT4K63UPLLJNA
+  SecretKey: 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
 
 # Configuration for the Jenkins instance that is attached to the
 # igor component of Spinnaker. For more info about the Jenkins integration
@@ -73,7 +73,7 @@ jenkins:
     ImagePullPolicy: "Always"
     Component: "jenkins-master"
     Cpu: "500m"
-    Memory: "512Mi"
+    Memory: "2048Mi"
     ServicePort: 8080
     ServiceType: ClusterIP
     ContainerPort: 8080
@@ -84,3 +84,4 @@ jenkins:
     ImageTag: v0.2.0
     Cpu: "500m"
     Memory: "512Mi"
+
