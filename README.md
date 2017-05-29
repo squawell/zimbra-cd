@@ -1,14 +1,14 @@
-Synacor Kubernetes + Zimbra Deployment
+# Synacor Kubernetes + Zimbra Deployment
 
 
-Requires:
+## Requires:
 
 - IAM access and secret keys with EC2, S3 and Route53 admin privileges
 
 
-I. Setup workstation. Launch t2.micro instance from Ubuntu 14.04 (Trusty) AMI.
+## I. Setup workstation. Launch t2.micro instance from Ubuntu 14.04 (Trusty) AMI.
 
-
+```bash
 ssh -i .ssh/zimbra-20170529.pem ubuntu@35.161.227.109
 
 ## run as root
@@ -50,9 +50,11 @@ wget https://github.com/kubernetes/kops/releases/download/1.5.1/kops-linux-amd64
 chmod +x kops-linux-amd64
 
 mv kops-linux-amd64 /usr/local/bin/kops
+```
 
-2. Create AWS resources to be used by zimbra app
+## II. Create AWS resources to be used by zimbra app
 
+```bash
 ## create r53 sub domain from aws console
 create hosted zone synacor-leo.cascadeo.info.
 create record set under cascadeo.info and copy NS for synacor-leo.cascadeo.info.
@@ -62,11 +64,11 @@ dig NS synacor-leo.cascadeo.info
 ## create s3 bucket via aws cli
 aws s3api create-bucket --bucket synacor-leo.cascadeo.info --create-bucket-configuration LocationConstraint=us-west-2
 aws s3api put-bucket-versioning --bucket synacor-leo.cascadeo.info  --versioning-configuration Status=Enabled
+```
 
+## III. Setup Kubernetes cluster
 
-II. Setup Kubernetes cluster
-
-
+```bash
 ## run from the workstation
 ## build cluster
 export NAME=synacor-leo.cascadeo.info
@@ -99,16 +101,16 @@ mv linux-amd64/helm /usr/local/bin/helm
 helm init
 helm version
 kubectl get po -n kube-system
+```
 
-III. Setup Spinnaker
+## IV. Setup Spinnaker
 
-https://github.com/cascadeo/synacor/blob/master/spinnaker/README.md
+* Follow https://github.com/cascadeo/synacor/blob/master/spinnaker/README.md
 
-IV. Deploy Zimbra app
+## V. Deploy Zimbra app
 
-From spinnaker, go to zimbra application then pipeline. Start execution of various pipeline entries.
+* From spinnaker, go to zimbra application then pipeline. Start execution of various pipeline entries.
 
-
-Miscellaneous
+## Miscellaneous
 
 * https://github.com/prem-cascadeo/zibootstrapper - bootstrapper / workstation
