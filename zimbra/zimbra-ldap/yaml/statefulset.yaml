@@ -36,3 +36,11 @@ spec:
            path: zimbra.conf
      imagePullSecrets:
      - name: myregistrykey
+ volumeClaimTemplates:
+ - metadata:
+     name: ldap
+   spec:
+     accessModes: [ "ReadWriteOnce" ]
+     resources:
+       requests:
+         storage: 10Gi
