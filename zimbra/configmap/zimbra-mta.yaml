@@ -4,16 +4,16 @@ metadata:
 apiVersion: v1
 data:
   zimbra-properties: |
-    AVDOMAIN="default.svc.cluster.local"
-    AVUSER="admin@default.svc.cluster.local"
-    CREATEADMIN="admin@default.svc.cluster.local"
+    AVDOMAIN="${NS}.svc.cluster.local"
+    AVUSER="admin@${NS}.svc.cluster.local"
+    CREATEADMIN="admin@${NS}.svc.cluster.local"
     CREATEADMINPASS="${PASSWORD}"
-    CREATEDOMAIN="default.svc.cluster.local"
+    CREATEDOMAIN="${NS}.svc.cluster.local"
     DOCREATEADMIN=yes
     DOCREATEDOMAIN=yes
     DOTRAINSA=yes
     EXPANDMENU=no
-    HOSTNAME="${HOSTNAME}.mta-service.default.svc.cluster.local"
+    HOSTNAME="${HOSTNAME}.mta-service.${NS}.svc.cluster.local"
     HTTPPORT=80
     HTTPPROXY="TRUE"
     HTTPPROXYPORT=8080
@@ -30,14 +30,14 @@ data:
     LDAPADMINPASS="${PASSWORD}"
     LDAPREPPASS="${PASSWORD}"
     LDAPBESSEARCHSET=set
-    LDAPHOST="ldap-service.default.svc.cluster.local"
+    LDAPHOST="ldap-service.${NS}.svc.cluster.local"
     LDAPPORT=389
     LDAPREPLICATIONTYPE=master
     LDAPSERVERID=2
     MAILBOXDMEMORY=256
     MAILPROXY=TRUE
     MODE=https
-    MTAAUTHHOST="mailbox-service.default.svc.cluster.local"
+    MTAAUTHHOST="mailbox-service.${NS}.svc.cluster.local"
     MYSQLMEMORYPERCENT=30
     POPPORT=7110
     POPPROXYPORT=110
@@ -49,21 +49,21 @@ data:
     RUNAV=yes
     RUNSA=yes
     RUNVMHA=no
-    SMTPDEST="admin@default.svc.cluster.local"
-    SMTPHOST="mta-service-external.default.svc.cluster.local"
+    SMTPDEST="admin@${NS}.svc.cluster.local"
+    SMTPHOST="mta-service-external.${NS}.svc.cluster.local"
     SMTPNOTIFY=yes
-    SMTPSOURCE="admin@default.svc.cluster.local"
+    SMTPSOURCE="admin@${NS}.svc.cluster.local"
     SNMPNOTIFY=yes
     SNMPTRAPHOST="${HOSTNAME}.${DOMAIN}"
     SPELLURL="http://${HOSTNAME}.${DOMAIN}:7780/aspell.php"
     STARTSERVERS=yes
     SYSTEMMEMORY=1.0
-    TRAINSAHAM="ham@default.svc.cluster.local"
-    TRAINSASPAM="spam@default.svc.cluster.local"
+    TRAINSAHAM="ham@${NS}.svc.cluster.local"
+    TRAINSASPAM="spam@${NS}.svc.cluster.local"
     UPGRADE=yes
     USESPELL=yes
     VERSIONUPDATECHECKS=TRUE
-    VIRUSQUARANTINE="virus-quarantine@default.svc.cluster.local"
+    VIRUSQUARANTINE="virus-quarantine@${NS}.svc.cluster.local"
     ZIMBRA_REQ_SECURITY=yes
     ldap_bes_searcher_password="${PASSWORD}"
     ldap_dit_base_dn_config=cn=zimbra
@@ -81,11 +81,11 @@ data:
     zimbraFeatureTasksEnabled=Enabled
     zimbraIPMode=ipv4
     zimbraMailProxy="TRUE"
-    zimbraMtaMyNetworks=127.0.0.0/8 0.0.0.0/0
+    zimbraMtaMyNetworks=127.0.0.0/8 100.64.0.0/10
     zimbraPrefTimeZoneId=America/Los_Angeles
     zimbraReverseProxyLookupTarget=TRUE
-    zimbraVersionCheckNotificationEmail="admin@default.svc.cluster.local"
-    zimbraVersionCheckNotificationEmailFrom="admin@default.svc.cluster.local"
+    zimbraVersionCheckNotificationEmail="admin@${NS}.svc.cluster.local"
+    zimbraVersionCheckNotificationEmailFrom="admin@${NS}.svc.cluster.local"
     zimbraVersionCheckSendNotifications=TRUE
     zimbraWebProxy="TRUE"
     zimbra_ldap_userdn=uid=zimbra,cn=admins,cn=zimbra

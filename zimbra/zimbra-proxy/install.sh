@@ -88,8 +88,8 @@ echo "Run zmupdatekeys as zimbra"
 su -c /opt/zimbra/bin/zmupdateauthkeys zimbra
 
 echo "opening PROXY Ports"
-sudo su -c "/opt/zimbra/libexec/zmproxyconfig -e -w -o -C -H ${HOSTNAME}.proxy-service.default.svc.cluster.local" -s /bin/sh zimbra
-sudo su -c "/opt/zimbra/bin/zmprov ms ${HOSTNAME}.proxy-service.default.svc.cluster.local zimbraReverseProxyMailMode https" -s /bin/sh zimbra
+sudo su -c "/opt/zimbra/libexec/zmproxyconfig -e -w -o -C -H ${HOSTNAME}.proxy-service.${NS}.svc.cluster.local" -s /bin/sh zimbra
+sudo su -c "/opt/zimbra/bin/zmprov ms ${HOSTNAME}.proxy-service.${NS}.svc.cluster.local zimbraReverseProxyMailMode https" -s /bin/sh zimbra
 
 echo "Restart Zimbra"
 sudo su -c "/opt/zimbra/bin/zmcontrol restart" zimbra

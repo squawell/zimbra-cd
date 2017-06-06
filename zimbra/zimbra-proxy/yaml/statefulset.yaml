@@ -24,6 +24,10 @@ spec:
          value: zimbra
        - name: PASSWORD
          value: temp1234
+       - name: NS
+         valueFrom:
+           fieldRef:
+             fieldPath: metadata.namespace
        ports:
        - containerPort: 22
        - containerPort: 25

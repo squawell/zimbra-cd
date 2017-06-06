@@ -1,16 +1,26 @@
 # Zimbra 8.7.7
 
-## Docker images in https://console.aws.amazon.com/ecs/home?region=us-east-1#/repositories
-1. zimbra-ldap -> 092658368226.dkr.ecr.us-east-1.amazonaws.com/synacor/zimbra-ldap
-2. zimbra-mailbox -> 092658368226.dkr.ecr.us-east-1.amazonaws.com/synacor/zimbra-mailbox
-3. zimbra-mta -> 092658368226.dkr.ecr.us-east-1.amazonaws.com/synacor/zimbra-mta
-4. zimbra-proxy -> 092658368226.dkr.ecr.us-east-1.amazonaws.com/synacor/zimbra-proxy
+## Docker images in https://us-west-2.console.aws.amazon.com/ecs/home?region=us-west-2#/repositories
+1. zimbra-ldap -> 294256424338.dkr.ecr.us-west-2.amazonaws.com/zimbra-ldap
+2. zimbra-mailbox -> 294256424338.dkr.ecr.us-west-2.amazonaws.com/zimbra-mailbox
+3. zimbra-mta -> 294256424338.dkr.ecr.us-west-2.amazonaws.com/zimbra-mta
+4. zimbra-proxy -> 294256424338.dkr.ecr.us-west-2.amazonaws.com/zimbra-proxy
+
+## Building image:
+0) docker is setup on your machine & aws-cli is installed
+    - aws configure //NOT NEEDED IF BUILD HOST HAS IAM ROLE TO ALLOW PUSH TO REGISTRY
+	- aws ecr get-login //output is docker login command, copy the output and execute it
+1) for each folder [zimbra-ldap, zimbra-mailbox, zimbra-mta, zimbra-proxy]
+    - cd $folder
+	- export REGISTRY=294256424338.dkr.ecr.us-west-2.amazonaws.com
+	- docker build -t $REGISTRY/$folder:latest 
+	- docker push $REGISTRY/$folder:latest
 
 ## Assumption: There is already a running cluster
 
 ## Order of installation:
 	1. zimbra-ldap
-	2. zimbra-mail box
+	2. zimbra-mailbox
 	3. zimbra-mta
 	4. zimbra-proxy
 
@@ -24,7 +34,7 @@
 		4. wget -qO- https://get.docker.com/ | sh
 		5. pull repo - git clone https://<git-user>@github.com/cascadeo/synacor.git
 		6. cd synacor/
-	2. aws configure (enter your account access and secret keys)
+	2. aws configure (enter your account access and secret keys) 
 2. Generate AWS myregistrykey
 	1. aws ecr get-login | sh -
 	2. cat ~/.docker/config.json | base64 -w 0
@@ -151,3 +161,8 @@
 		4. zmprov ca admin@synacor-leo.cascadeo.info test1234 zimbraIsAdminAccount TRUE (zmprov ca admin@domain password zimbraIsAdminAccount TRUE)
 		5. browse to the Load Balancer endpoint on step 10.2 and login using the account on 10.4.4
 		6. send and receive email
+
+		
+TODO:
+- cleanup of unnecessary files
+- template the yamls (in progress)

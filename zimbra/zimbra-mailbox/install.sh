@@ -100,20 +100,14 @@ echo "Run zmupdatekeys as zimbra"
 su -c /opt/zimbra/bin/zmupdateauthkeys zimbra
 
 echo "HTTPS Proxy mode"
-sudo su -c "/opt/zimbra/bin/zmprov ms ${HOSTNAME}.mailbox-service.default.svc.cluster.local zimbraReverseProxyMailMode https" -s /bin/sh zimbra
-sudo su -c "/opt/zimbra/libexec/zmproxyconfig -e -w -o -H ${HOSTNAME}.mailbox-service.default.svc.cluster.local" -s /bin/sh zimbra
+sudo su -c "/opt/zimbra/bin/zmprov ms ${HOSTNAME}.mailbox-service.${NS}.svc.cluster.local zimbraReverseProxyMailMode https" -s /bin/sh zimbra
+sudo su -c "/opt/zimbra/libexec/zmproxyconfig -e -w -o -H ${HOSTNAME}.mailbox-service.${NS}.svc.cluster.local" -s /bin/sh zimbra
 
 echo "Restart Zimbra"
 sudo su -c "/opt/zimbra/bin/zmcontrol restart" zimbra
 
 echo "Restart CROND"
 service crond restart
-
-# echo "Register domain zimbra-k8s.cascadeo.info"
-# /opt/zimbra/bin/zmprov cd zimbra-k8s.cascadeo.info
-#
-# echo "Register user admin@zimbra-k8s.cascadeo.info"
-# /opt/zimbra/bin/zmprov ca admin@zimbra-k8s.cascadeo.info test1234 zimbraIsAdminAccount TRUE
 
 echo "Server is ready..."
 if [[ $1 == "-d" ]]; then
