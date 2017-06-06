@@ -56,14 +56,10 @@ mv kops-linux-amd64 /usr/local/bin/kops
 
 ```bash
 ## create r53 sub domain from aws console
-create hosted zone synacor-leo.cascadeo.info.
-create record set under cascadeo.info and copy NS for synacor-leo.cascadeo.info.
+create hosted zone mail.zimbra.org.
+create record set under zimbra.org and copy NS for mail.zimbra.org.
 
-dig NS synacor-leo.cascadeo.info
-
-## create s3 bucket via aws cli
-aws s3api create-bucket --bucket synacor-leo.cascadeo.info --create-bucket-configuration LocationConstraint=us-west-2
-aws s3api put-bucket-versioning --bucket synacor-leo.cascadeo.info  --versioning-configuration Status=Enabled
+dig NS mail.zimbra.org
 ```
 
 ## III. Setup Kubernetes cluster
@@ -71,8 +67,12 @@ aws s3api put-bucket-versioning --bucket synacor-leo.cascadeo.info  --versioning
 ```bash
 ## run from the workstation
 ## build cluster
-export NAME=synacor-leo.cascadeo.info
-export KOPS_STATE_STORE=s3://synacor-leo.cascadeo.info
+export NAME=kubernetes.zimbra.org
+export KOPS_STATE_STORE=s3://kubernetes.zimbra.org
+
+## create s3 bucket via aws cli
+aws s3api create-bucket --bucket ${KOPS_STATE_STORE} --create-bucket-configuration LocationConstraint=us-west-2
+aws s3api put-bucket-versioning --bucket ${KOPS_STATE_STORE}  --versioning-configuration Status=Enabled
 
 aws ec2 describe-availability-zones --region us-west-2
 
@@ -87,7 +87,7 @@ kubectl get no
 
 ## scale
 kops edit ig nodes
-# t2.large; max=4
+# set nodes to t2.large, min=3 and max=4
 
 kops update cluster --yes
 kops rolling-update cluster --yes
