@@ -56,7 +56,7 @@ echo "Install ZIMBRA"
 while true;
 do
 
-	if [ -d "/opt/zimbra"]; then
+	if [ -d "/opt/zimbra" ]; then
 		echo "Zimbra have data"
 		
 		echo "========================"
