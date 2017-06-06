@@ -12,7 +12,7 @@ spec:
    spec:
      containers:
      - name: mailbox
-       image: 092658368226.dkr.ecr.us-east-1.amazonaws.com/synacor/zimbra-mailbox
+       image: 294256424338.dkr.ecr.us-west-2.amazonaws.com/zimbra-mailbox
        imagePullPolicy: Always
        volumeMounts:
        - name: zimbra-volume
