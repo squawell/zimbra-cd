@@ -114,5 +114,4 @@ kubectl get po -n kube-system
 ## Miscellaneous
 
 * https://github.com/cascadeo/synacor/blob/master/zimbra/README.md - manual setup for Zimbra containers
-* https://github.com/prem-cascadeo/zibootstrapper - bootstrapper / workstation
 
