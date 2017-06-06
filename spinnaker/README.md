@@ -15,7 +15,7 @@ Prerequisites:
 1. Create S3 bucket for Spinnaker via AWS API or console. Create a directory named front50.
 
 ```bash
-S3_BUCKET=synacor-leo.spinnaker
+S3_BUCKET=spinnaker.kubernetes.zimbra.org
 
 aws s3api create-bucket --bucket ${S3_BUCKET}  --create-bucket-configuration LocationConstraint=us-west-2
 aws s3api put-object --bucket ${S3_BUCKET} --key front50/
@@ -39,7 +39,7 @@ Server: &version.Version{SemVer:"v2.2.1", GitCommit:"db531fd75fb2a1fb0841a98d9e5
 3. Clone this repo and install the modified Spinnaker chart
 
 ```bash
-export SPIN_NAME=synacor-leo
+export SPIN_NAME=zimbra
 
 cd synacor/
 
@@ -52,15 +52,15 @@ helm status ${SPIN_NAME}
 kubectl get po
 # wait untill all pods are ready and in RUNNING status
 NAME                                                  READY     STATUS    RESTARTS   AGE
-synacor-leo4-redis-3548858892-l09ns                   1/1       Running   0          2m
-synacor-leo4-spinnaker-clouddriver-3526782649-lx7tt   1/1       Running   0          2m
-synacor-leo4-spinnaker-deck-2312115957-5rb1t          1/1       Running   0          2m
-synacor-leo4-spinnaker-echo-2240175993-4hpjj          1/1       Running   0          2m
-synacor-leo4-spinnaker-front50-1775784785-mr5zw       1/1       Running   0          2m
-synacor-leo4-spinnaker-gate-1386831737-vs528          1/1       Running   2          2m
-synacor-leo4-spinnaker-igor-2958287750-tsqh3          2/2       Running   0          2m
-synacor-leo4-spinnaker-orca-4017840000-qb85b          1/1       Running   0          2m
-synacor-leo4-spinnaker-rosco-2666648900-8rj8b         1/1       Running   0          2m
+zimbra-redis-1133920672-slp1v                 1/1       Running   0          3d
+zimbra-spinnaker-clouddriver-13592141-ldz3m   1/1       Running   0          3d
+zimbra-spinnaker-deck-4018278025-x77ch        1/1       Running   0          3d
+zimbra-spinnaker-echo-4149434125-kjkxm        1/1       Running   0          3d
+zimbra-spinnaker-front50-1285571732-ztq72     1/1       Running   0          3d
+zimbra-spinnaker-gate-3292944141-jd361        1/1       Running   7          3d
+zimbra-spinnaker-igor-383944194-rl672         2/2       Running   0          3d
+zimbra-spinnaker-orca-1623283476-qcg1x        1/1       Running   5          3d
+zimbra-spinnaker-rosco-916311256-vr1bg        1/1       Running   0          3d
 ```
 
 4. Port forward 9000 and 8084 to access the GUI
@@ -79,5 +79,5 @@ kubectl port-forward --namespace default $DECK_POD 9000 &
 
 ```bash
 # if you are accessing K8s on a separate workstation, forward the ports on a new SSH tunnel
-ssh -i .ssh/cascadeo20160514-stg.pem -L 9000:127.0.0.1:9000 -L 8084:127.0.0.1:8084 ubuntu@34.209.216.170
+ssh -i .ssh/zimbra-20170529.pem -L 9000:127.0.0.1:9000 -L 8084:127.0.0.1:8084 ubuntu@35.161.227.109
 ```
