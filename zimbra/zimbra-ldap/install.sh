@@ -52,9 +52,17 @@ echo "Host file"
 cat /etc/hosts
 
 echo "Install ZIMBRA"
-echo "========================"
-cd /zcs-* && ./install.sh --platform-override < /install_override
-echo "========================"
+
+if [ -d "/opt/zimbra" ]; then
+	echo "Zimbra have data"
+
+	echo "========================"
+	cd /zcs-* && ./install.sh -s --platform-override < /install_override_exists
+	echo "========================"
+else:
+	cd /zcs-* && ./install.sh --platform-override < /install_override
+	echo "========================"
+fi
 
 echo "Create zimbra config from configmap"
 envsubst < /etc/config/zimbra.conf > /zimbra_config_generated

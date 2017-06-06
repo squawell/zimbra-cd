@@ -55,14 +55,25 @@ echo "Install ZIMBRA"
 
 while true;
 do
-	echo "========================"
-	cd /zcs-* && ./install.sh -s --platform-override < /install_override
-	echo "========================"
+
+	if [ -d "/opt/zimbra" ]; then
+		echo "Zimbra have data"
+		
+		echo "========================"
+		cd /zcs-* && ./install.sh -s --platform-override < /install_override_exists
+		echo "========================"
+
+	else
+		echo "========================"
+		cd /zcs-* && ./install.sh -s --platform-override < /install_override
+		echo "========================"
+	fi
 
 	if [ -d "/opt/zimbra/bin" ]; then
 		echo "Zimbra Installed"
-  	break
+  		break
 	fi
+
 	echo "reinstalling zimbra!"
 done
 
