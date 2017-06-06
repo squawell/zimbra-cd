@@ -17,6 +17,8 @@ spec:
        volumeMounts:
        - name: zimbra-volume
          mountPath: /etc/config
+       - name: ldap
+         mountPath: /opt/zimbra
        env:
        - name: EXT_DOMAIN
          value: arvin-k8s.cascadeo.info
