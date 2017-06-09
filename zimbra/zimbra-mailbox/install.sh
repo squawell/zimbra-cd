@@ -57,12 +57,27 @@ while true;
 do
 
 	if [ -d "/opt/zimbra" ]; then
-		echo "Zimbra have data"
-		
-		echo "========================"
-		cd /zcs-* && ./install.sh -s --platform-override < /install_override_exists
-		echo "========================"
-
+                echo "files detected"
+                mv /opt/zimbra/data /opt/databackup
+                mv /opt/zimbra/conf /opt/confbackup
+                mv /opt/zimbra/store /opt/storebackup
+                mv /opt/zimbra/db    /opt/dbbackup
+                mv /opt/zimbra/index  /opt/indexbackup
+                touch /opt/alreadyexist
+                echo "========================"
+                cd /zcs-* && ./install.sh -s --platform-override < /install_override_exists
+                rm -r /opt/zimbra/data
+                mv /opt/databackup /opt/zimbra/data && chown -R zimbra:zimbra /opt/zimbra/data
+                rm -r /opt/zimbra/conf
+                mv /opt/confbackup /opt/zimbra/conf && chown -R zimbra:zimbra /opt/zimbra/data
+                rm -r /opt/zimbra/store
+                mv /opt/storebackup /opt/zimbra/store && chown -R zimbra:zimbra /opt/zimbra/store
+                rm -r /opt/zimbra/db
+                mv /opt/dbbackup /opt/zimbra/db && chown -R zimbra:zimbra /opt/zimbra/db
+                rm -r /opt/zimbra/index
+                mv /opt/indexbackup /opt/zimbra/index && chown -R zimbra:zimbra /opt/zimbra/index
+                cd /opt/zimbra && /opt/zimbra/libexec/zmfixperms --extended
+                chown -R zimbra:zimbra /opt/zimbra/.ssh
 	else
 		echo "========================"
 		cd /zcs-* && ./install.sh -s --platform-override < /install_override

@@ -55,9 +55,18 @@ echo "Install ZIMBRA"
 
 if [ -d "/opt/zimbra" ]; then
 	echo "Zimbra have data"
-
+        mv /opt/zimbra/data /opt/databackup
+        mv /opt/zimbra/conf /opt/confbackup
+        touch /opt/alreadyexist
 	echo "========================"
 	cd /zcs-* && ./install.sh -s --platform-override < /install_override_exists
+        rm -r /opt/zimbra/data
+        mv /opt/databackup /opt/zimbra/data && chown -R zimbra:zimbra /opt/zimbra/data
+        rm -r /opt/zimbra/conf
+        mv /opt/confbackup /opt/zimbra/conf && chown -R zimbra:zimbra /opt/zimbra/data
+        mv /opt/
+        cd /opt/zimbra && /opt/zimbra/libexec/zmfixperms --extended
+        chown -R zimbra:zimbra /opt/zimbra/.ssh
 	echo "========================"
 else
 	cd /zcs-* && ./install.sh --platform-override < /install_override
@@ -72,6 +81,7 @@ cat /zimbra_config_generated
 
 echo "Configure Zimbra"
 /opt/zimbra/libexec/zmsetup.pl -c /zimbra_config_generated
+
 
 echo "Fix rsyslog"
 cat <<EOF >> /etc/rsyslog.conf
