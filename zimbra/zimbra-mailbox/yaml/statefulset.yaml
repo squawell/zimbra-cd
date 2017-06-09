@@ -18,7 +18,7 @@ spec:
        - name: zimbra-volume
          mountPath: /etc/config
        - name: mailbox
-         mountPath: /opt/zimbra
+         mountPath: /opt
        env:
        - name: EXT_DOMAIN
          value: arvin-k8s.cascadeo.info

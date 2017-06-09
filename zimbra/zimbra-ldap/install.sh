@@ -59,7 +59,7 @@ if [ -d "/opt/zimbra" ]; then
 	echo "========================"
 	cd /zcs-* && ./install.sh -s --platform-override < /install_override_exists
 	echo "========================"
-else:
+else
 	cd /zcs-* && ./install.sh --platform-override < /install_override
 	echo "========================"
 fi
