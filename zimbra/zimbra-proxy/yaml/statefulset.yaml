@@ -12,7 +12,7 @@ spec:
    spec:
      containers:
      - name: proxy
-       image: 294256424338.dkr.ecr.us-west-2.amazonaws.com/zimbra-proxy
+       image: 294256424338.dkr.ecr.us-west-2.amazonaws.com/zimbra-proxy:latest
        imagePullPolicy: Always
        volumeMounts:
        - name: zimbra-volume

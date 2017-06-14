@@ -12,7 +12,7 @@ spec:
    spec:
      containers:
      - name: mta
-       image: 294256424338.dkr.ecr.us-west-2.amazonaws.com/zimbra-mta
+       image: 294256424338.dkr.ecr.us-west-2.amazonaws.com/zimbra-mta:latest
        imagePullPolicy: Always
        volumeMounts:
        - name: zimbra-volume
