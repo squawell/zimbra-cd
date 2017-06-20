@@ -71,8 +71,8 @@ export NAME=kubernetes.zimbra.org
 export KOPS_STATE_STORE=s3://kubernetes.zimbra.org
 
 ## create s3 bucket via aws cli
-aws s3api create-bucket --bucket ${KOPS_STATE_STORE} --create-bucket-configuration LocationConstraint=us-west-2
-aws s3api put-bucket-versioning --bucket ${KOPS_STATE_STORE}  --versioning-configuration Status=Enabled
+aws s3api create-bucket --bucket ${NAME} --create-bucket-configuration LocationConstraint=us-west-2
+aws s3api put-bucket-versioning --bucket ${NAME}  --versioning-configuration Status=Enabled
 
 aws ec2 describe-availability-zones --region us-west-2
 
