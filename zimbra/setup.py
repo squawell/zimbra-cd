@@ -202,9 +202,8 @@ if __name__ == "__main__":
         print "Usage: python setup.py [environment] [releasename]"
         raise SystemExit
 
-    zone = sys.argv[1]
-    environment = sys.argv[2]
-    release = sys.argv[3]
+    environment = sys.argv[1]
+    release = sys.argv[2]
 
     namespace = "%s-%s" %(environment, release)
     if environment == "default" or release == "default":
