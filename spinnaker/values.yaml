@@ -34,7 +34,7 @@ images:
   rosco: quay.io/spinnaker/rosco:v0.78.0
 
 # Bucket to use when storing config data in S3 compatible storage
-storageBucket: synacor-leo.spinnaker
+storageBucket: spinnaker.kubernetes.zimbra.org
 
 # Resources to provide to each of
 # the Spinnaker components
@@ -54,12 +54,12 @@ redis:
 # Minio access/secret keys for the in-cluster S3 usage
 # Minio is not exposed publically
 minio:
-  AccessKey: AKIAJJLHT4K63UPLLJNA
-  SecretKey: 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
+  AccessKey: AKIAJJLHTxxxxxxx
+  SecretKey: oMCfz4MsWc7qqc7eMxxxxxxxxxxxxxx
 
 s3:
-  AccessKey: AKIAJJLHT4K63UPLLJNA
-  SecretKey: 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
+  AccessKey: AKIAJJLHTxxxxxxx
+  SecretKey: oMCfz4MsWc7qqc7eMxxxxxxxxxxxxxx
 
 # Configuration for the Jenkins instance that is attached to the
 # igor component of Spinnaker. For more info about the Jenkins integration

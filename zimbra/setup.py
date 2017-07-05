@@ -207,4 +207,7 @@ if __name__ == "__main__":
     release = sys.argv[3]
 
     namespace = "%s-%s" %(environment, release)
+    if environment == "default" or release == "default":
+      namespace = "default"
+
     main(zone, namespace)

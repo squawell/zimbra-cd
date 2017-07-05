@@ -76,7 +76,12 @@ spec:
               name: jenkins-home
             - mountPath: /usr/local/bin/kubectl
               name: kubectl
+            - mountPath: /jobs
+              name: jenkins-jobs
       volumes:
+      - name: jenkins-jobs
+        configMap:
+          name: {{ .Release.Name }}-jenkins-jobs
       - name: git-deploy
         secret:
           secretName: git-repo
