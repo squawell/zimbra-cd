@@ -196,10 +196,10 @@ def main(zone, namespace):
 if __name__ == "__main__":
     """
     Setup.py arguments
-    python setup.py [availabilityzone] [environment] [releasename]
+    python setup.py [environment] [releasename]
     """
-    if len(sys.argv) < 4:
-        print "Usage: python setup.py [availabilityzone] [environment] [releasename]"
+    if len(sys.argv) < 3:
+        print "Usage: python setup.py [environment] [releasename]"
         raise SystemExit
 
     zone = sys.argv[1]
