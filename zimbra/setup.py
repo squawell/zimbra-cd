@@ -154,7 +154,7 @@ def create_proxy(namespace):
     os.system("kubectl create -n %s -f %s/external-proxy-service.yaml" %(namespace, proxy_path))
     print "External PROXY service created..."
 
-def create_dns_settings(cluster):
+def create_dns_settings():
     client = boto3.client('route53')
 
     response = client.list_hosted_zones_by_name(DNSName='zimbra-k8s.cascadeo.info')
@@ -180,7 +180,7 @@ def create_dns_settings(cluster):
     	except Exception as e:
     		print e
 
-def main(zone, namespace):
+def main(namespace):
     update_yaml_release(namespace)
     create_namespace(namespace)
 
@@ -190,7 +190,7 @@ def main(zone, namespace):
     create_mailbox(namespace)
     create_mta(namespace)
     create_proxy(namespace)
-    # create_dns_settings(zone)
+    # create_dns_settings()
 
 
 if __name__ == "__main__":
@@ -209,4 +209,4 @@ if __name__ == "__main__":
     if environment == "default" or release == "default":
       namespace = "default"
 
-    main(zone, namespace)
+    main(namespace)
