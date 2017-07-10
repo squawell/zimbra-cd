@@ -15,7 +15,7 @@ Prerequisites:
 1. Create S3 bucket for Spinnaker via AWS API or console. Create a directory named front50.
 
 ```bash
-S3_BUCKET=spinnaker.kubernetes.zimbra.org
+export S3_BUCKET=spinnaker.kubernetes.zimbra.org
 
 aws s3api create-bucket --bucket ${S3_BUCKET}  --create-bucket-configuration LocationConstraint=us-west-2
 aws s3api put-object --bucket ${S3_BUCKET} --key front50/
@@ -40,11 +40,18 @@ Server: &version.Version{SemVer:"v2.2.1", GitCommit:"db531fd75fb2a1fb0841a98d9e5
 
 ```bash
 export SPIN_NAME=zimbra
+export S3_BUCKET=spinnaker.kubernetes.zimbra.org
 
 cd synacor/
 
 # edit values.yaml and update s3.AccessKey, s3.SecretKey and storageBucket to match step #1
 vi spinnaker/values.yaml
+
+# get GitHub key from Leo and save into a file
+kubectl create secret generic git-repo --from-file=ssh-privatekey=/path/to/key
+
+# sync front50
+aws s3 sync spinnaker/data/front50/ s3://${S3_BUCKET}/front50/
 
 helm install --name ${SPIN_NAME} spinnaker/
 helm status ${SPIN_NAME}
