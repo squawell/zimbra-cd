@@ -70,21 +70,38 @@ zimbra-spinnaker-orca-1623283476-qcg1x        1/1       Running   5          3d
 zimbra-spinnaker-rosco-916311256-vr1bg        1/1       Running   0          3d
 ```
 
-4. Port forward 9000 and 8084 to access the GUI
+4. Port forward 9000 and 8084 to access the Spinnaker GUI. Also port forward 8080 to access Jenkins.
 
 ```bash
-## port forward deck and gate
+## from the workstation - port forward deck and gate
 
 export GATE_POD=$(kubectl get pods --namespace default -l "component=gate,app=${SPIN_NAME}-spinnaker" -o jsonpath="{.items[0].metadata.name}")
 export DECK_POD=$(kubectl get pods --namespace default -l "component=deck,app=${SPIN_NAME}-spinnaker" -o jsonpath="{.items[0].metadata.name}")
 
 kubectl port-forward --namespace default $GATE_POD 8084 &
 kubectl port-forward --namespace default $DECK_POD 9000 &
-```
 
-5. Access the GUI in http://localhost:9000/ 
+export IGOR_POD=$(kubectl get pods --namespace default -l "component=igor,app=${SPIN_NAME}-spinnaker" -o jsonpath="{.items[0].metadata.name}")
+kubectl port-forward --namespace default $IGOR_POD 8080 &
+```
 
 ```bash
 # if you are accessing K8s on a separate workstation, forward the ports on a new SSH tunnel
-ssh -i .ssh/zimbra-20170529.pem -L 9000:127.0.0.1:9000 -L 8084:127.0.0.1:8084 ubuntu@35.161.227.109
+ssh -i .ssh/zimbra-20170529.pem -L 9000:127.0.0.1:9000 -L 8084:127.0.0.1:8084 -L 8080:127.0.0.1:8080 ubuntu@35.161.227.109
+
 ```
+
+5. Access Jenkins in http://127.0.0.1:8080/. Ensure that runs-script-local Jenkins job is present. If not run the following:
+
+```bash
+# from the workstation - execute
+kubectl exec -it $IGOR_POD -c jenkins-master -- /bin/bash
+
+# inside the Jenkins container - execute
+curl -X POST -H "Content-Type: application/xml" --retry "20" --retry-delay "10" --max-time "3" --data-binary "@/jobs/run-script-local.xml" "http://127.0.0.1:8080/createItem?name=run-script-local"
+
+# refresh http://127.0.0.1:8080/ to see the job
+```
+
+5. Access the Spinnaker GUI in http://localhost:9000/. The pipelines are located unnder http://127.0.0.1:9000/#/applications/zimbra/executions
+
