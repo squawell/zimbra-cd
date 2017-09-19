@@ -1,0 +1,45 @@
+{
+  "keepWaitingPipelines" : false,
+  "parameterConfig" : [ {
+    "default" : "default",
+    "description" : "Cluster or namespace",
+    "name" : "CLUSTER_NAME"
+  }, {
+    "default" : "1",
+    "description" : "Pod count",
+    "name" : "COUNT"
+  }, {
+    "default" : "mta",
+    "description" : "Choose one of the following: ldap, mta, mailbox, proxy",
+    "name" : "COMPONENT"
+  } ],
+  "lastModifiedBy" : "anonymous",
+  "index" : 0,
+  "triggers" : [ ],
+  "executionEngine" : "v2",
+  "limitConcurrent" : true,
+  "application" : "zimbra",
+  "parallel" : true,
+  "name" : "Scale MTA, LDAP, Proxy or Mailbox pods",
+  "stages" : [ {
+    "command" : "kubectl patch statefulsets ${parameters.COMPONENT} -p {\"spec\":{\"replicas\":${parameters.COUNT}}} -n ${parameters.CLUSTER_NAME}",
+    "failPipeline" : true,
+    "name" : "Update statefulset replica count",
+    "refId" : "1",
+    "requisiteStageRefIds" : [ ],
+    "type" : "script",
+    "user" : "[anonymous]",
+    "waitForCompletion" : true
+  }, {
+    "command" : "kubectl get statefulsets",
+    "failPipeline" : true,
+    "name" : "Verify",
+    "refId" : "2",
+    "requisiteStageRefIds" : [ "1" ],
+    "type" : "script",
+    "user" : "[anonymous]",
+    "waitForCompletion" : true
+  } ],
+  "id" : "2143696d-ab54-48ae-aab4-b08880fd598d",
+  "updateTs" : "1501081887000"
+}

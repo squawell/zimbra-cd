@@ -7,7 +7,7 @@ import time
 
 path = os.path.dirname(__file__)
 
-def update_yaml_release(namespace):
+def update_yaml_release(namespace, releasename):
     print "Updating yaml files for release %s..." %(namespace)
     yfiles = ['zimbra-ldap', 'zimbra-mailbox', 'zimbra-mta', 'zimbra-proxy']
       
@@ -20,7 +20,8 @@ def update_yaml_release(namespace):
               if 'labels' not in doc['metadata']:
                 doc['metadata']['labels'] = {}
 
-              doc['metadata']['labels']['release'] = namespace
+              doc['metadata']['labels']['cluster'] = namespace
+              doc['metadata']['labels']['release'] = releasename
 
             outdir = "%s/%s/yaml/%s" %(path, yf, namespace)
             if not os.path.exists(outdir):
@@ -180,8 +181,8 @@ def create_dns_settings():
     	except Exception as e:
     		print e
 
-def main(namespace):
-    update_yaml_release(namespace)
+def main(namespace, releasename):
+    update_yaml_release(namespace, releasename)
     create_namespace(namespace)
 
     build_registry(namespace)
@@ -196,17 +197,13 @@ def main(namespace):
 if __name__ == "__main__":
     """
     Setup.py arguments
-    python setup.py [environment] [releasename]
+    python setup.py [clustername] [releasename]
     """
     if len(sys.argv) < 3:
-        print "Usage: python setup.py [environment] [releasename]"
+        print "Usage: python setup.py [clustername] [releasename]"
         raise SystemExit
 
-    environment = sys.argv[1]
-    release = sys.argv[2]
+    clustername = sys.argv[1]
+    releasename = sys.argv[2]
 
-    namespace = "%s-%s" %(environment, release)
-    if environment == "default" or release == "default":
-      namespace = "default"
-
-    main(namespace)
+    main(clustername, releasename)

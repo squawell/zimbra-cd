@@ -45,6 +45,22 @@ spec:
        - containerPort: 7071
        - containerPort: 8080
        - containerPort: 8443
+       readinessProbe:
+         exec:
+           command:
+           - /bin/sh
+           - -c
+           - test $(service zimbra status | grep Stopped | wc -l) -eq 0
+         initialDelaySeconds: 600
+         periodSeconds: 10
+       livenessProbe:
+         exec:
+           command:
+           - /bin/sh
+           - -c
+           - test $(service zimbra status | grep Stopped | wc -l) -eq 0
+         initialDelaySeconds: 900
+         periodSeconds: 15
      volumes:
      - name: zimbra-volume
        configMap:

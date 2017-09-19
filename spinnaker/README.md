@@ -53,6 +53,15 @@ kubectl create secret generic git-repo --from-file=ssh-privatekey=/path/to/key
 # sync front50
 aws s3 sync spinnaker/data/front50/ s3://${S3_BUCKET}/front50/
 
+# workaround for missing kubectl in nodes
+# make sure to have SSH access to nodes
+kops delete secret sshpublickey admin
+kops create secret sshpublickey admin -i /path/to/your/public/key
+kops update cluster  --yes
+kops rolling-update cluster --yes
+kops validate cluster
+# copy kubectl from workstation to nodes via SCP
+
 helm install --name ${SPIN_NAME} spinnaker/
 helm status ${SPIN_NAME}
 

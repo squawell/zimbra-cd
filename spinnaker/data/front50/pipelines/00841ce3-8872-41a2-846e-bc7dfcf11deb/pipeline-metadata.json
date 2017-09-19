@@ -1,0 +1,24 @@
+{
+  "keepWaitingPipelines" : false,
+  "parameterConfig" : [ ],
+  "lastModifiedBy" : "anonymous",
+  "index" : 2,
+  "triggers" : [ ],
+  "executionEngine" : "v2",
+  "limitConcurrent" : true,
+  "application" : "zimbra",
+  "parallel" : true,
+  "name" : "List existing clusters or namespaces",
+  "stages" : [ {
+    "command" : "kubectl get ns",
+    "failPipeline" : true,
+    "name" : "List namespaces",
+    "refId" : "1",
+    "requisiteStageRefIds" : [ ],
+    "type" : "script",
+    "user" : "[anonymous]",
+    "waitForCompletion" : true
+  } ],
+  "id" : "00841ce3-8872-41a2-846e-bc7dfcf11deb",
+  "updateTs" : "1501082098000"
+}

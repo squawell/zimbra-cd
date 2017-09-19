@@ -1,0 +1,54 @@
+{
+  "keepWaitingPipelines" : false,
+  "parameterConfig" : [ {
+    "default" : "default",
+    "description" : "Cluster name",
+    "name" : "CLUSTER_NAME"
+  }, {
+    "default" : "master",
+    "description" : "Git branch",
+    "name" : "GIT_BRANCH"
+  }, {
+    "default" : "git@github.com:cascadeo/synacor.git",
+    "description" : "Git repo",
+    "name" : "GIT_REPO"
+  } ],
+  "lastModifiedBy" : "anonymous",
+  "index" : 1,
+  "triggers" : [ ],
+  "executionEngine" : "v2",
+  "limitConcurrent" : true,
+  "application" : "zimbra",
+  "parallel" : true,
+  "name" : "Deploy new Zimbra cluster",
+  "stages" : [ {
+    "command" : "git clone -b ${parameters.GIT_BRANCH} ${parameters.GIT_REPO} /tmp/deploy_${parameters.CLUSTER_NAME}-${parameters.GIT_BRANCH}",
+    "failPipeline" : true,
+    "name" : "Pull from repo",
+    "refId" : "1",
+    "requisiteStageRefIds" : [ ],
+    "type" : "script",
+    "user" : "[anonymous]",
+    "waitForCompletion" : true
+  }, {
+    "command" : "python /tmp/deploy_${parameters.CLUSTER_NAME}-${parameters.GIT_BRANCH}/zimbra/setup.py ${parameters.CLUSTER_NAME} ${parameters.GIT_BRANCH}",
+    "failPipeline" : true,
+    "name" : "Run deploy script",
+    "refId" : "2",
+    "requisiteStageRefIds" : [ "1" ],
+    "type" : "script",
+    "user" : "[anonymous]",
+    "waitForCompletion" : true
+  }, {
+    "command" : "rm -rf /tmp/deploy_${parameters.CLUSTER_NAME}-${parameters.GIT_BRANCH}",
+    "failPipeline" : true,
+    "name" : "Cleanup",
+    "refId" : "3",
+    "requisiteStageRefIds" : [ "2" ],
+    "type" : "script",
+    "user" : "[anonymous]",
+    "waitForCompletion" : true
+  } ],
+  "id" : "ec052a90-1370-4f4e-87f2-007d3bfbe3fd",
+  "updateTs" : 1501082455149
+}

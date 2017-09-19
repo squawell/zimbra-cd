@@ -9,11 +9,11 @@
 ## Building image:
 0) docker is setup on your machine & aws-cli is installed
     - aws configure //NOT NEEDED IF BUILD HOST HAS IAM ROLE TO ALLOW PUSH TO REGISTRY
-	- aws ecr get-login //output is docker login command, copy the output and execute it
+	- aws ecr get-login --no-include-email //output is docker login command, copy the output and execute it
 1) for each folder [zimbra-ldap, zimbra-mailbox, zimbra-mta, zimbra-proxy]
     - cd $folder
 	- export REGISTRY=294256424338.dkr.ecr.us-west-2.amazonaws.com
-	- docker build -t $REGISTRY/$folder:latest 
+	- docker build -t $REGISTRY/$folder:latest .
 	- docker push $REGISTRY/$folder:latest
 
 ## Assumption: There is already a running cluster

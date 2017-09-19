@@ -1,7 +1,6 @@
 #!/bin/sh
 
-# environment variables
-
+# Environment variables
 HOSTNAME=$(hostname -s)
 DOMAIN=$(hostname -d)
 FQDN="${HOSTNAME}.${DOMAIN}"
@@ -10,7 +9,6 @@ REV_IP=$(ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | cut -f1  
 REV_LAST=$(ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | cut -f1  -d'/'|awk -F. '{print $4}')
 
 # Display variables for debugging
-
 echo hostname - $HOSTNAME
 echo domain - $DOMAIN
 echo fqdn - $FQDN
@@ -35,34 +33,31 @@ cat /etc/hosts
 INST_FILE=zcs-8.7.7_GA_1787.RHEL6_64.20170410133400.tgz
 echo "Checking zimbra installer for CentOS...${INST_FILE}"
 if [ ! -f /${INST_FILE} ]; then
-	echo "Downloading from source..."
-	wget -O /${INST_FILE} http://files2.zimbra.com/downloads/8.7.7_GA/${INST_FILE}
+  echo "Downloading from source..."
+  wget -O /${INST_FILE} http://files2.zimbra.com/downloads/8.7.7_GA/${INST_FILE}
 fi
 
 if [ -f /${INST_FILE} ]; then
-	echo "Extracting installer...${INST_FILE}"
-	tar -xzvf /${INST_FILE} -C /
+  echo "Extracting installer...${INST_FILE}"
+  tar -xzvf /${INST_FILE} -C /
 else
-	echo "Zimbra installer not found!"
-	exit 1
+  echo "Zimbra installer not found!"
+  exit 1
 fi
 
 
-echo "Host file"
-cat /etc/hosts
+echo "Install Zimbra"
+while true; do
+  echo "========================"
+  cd /zcs-* && ./install.sh -s --platform-override < /install_override
+  echo "========================"
 
-echo "Install ZIMBRA"
-while true;
-do
-	echo "========================"
-	cd /zcs-* && ./install.sh -s --platform-override < /install_override
-	echo "========================"
+  if [ -d "/opt/zimbra/bin" ]; then
+    echo "Zimbra installed"
+    break
+  fi
 
-	if [ -d "/opt/zimbra/bin" ]; then
-		echo "Zimbra Installed"
-  	break
-	fi
-	echo "reinstalling zimbra!"
+  echo "Reinstalling Zimbra"
 done
 
 echo "Create zimbra config from configmap"
@@ -87,17 +82,18 @@ echo "Fix RED status"
 echo "Run zmupdatekeys as zimbra"
 su -c /opt/zimbra/bin/zmupdateauthkeys zimbra
 
-echo "opening PROXY Ports"
-sudo su -c "/opt/zimbra/libexec/zmproxyconfig -e -w -o -C -H ${HOSTNAME}.proxy-service.${NS}.svc.cluster.local" -s /bin/sh zimbra
-sudo su -c "/opt/zimbra/bin/zmprov ms ${HOSTNAME}.proxy-service.${NS}.svc.cluster.local zimbraReverseProxyMailMode https" -s /bin/sh zimbra
+echo "Opening proxy ports"
+su -c "/opt/zimbra/libexec/zmproxyconfig -e -w -o -C -H ${HOSTNAME}.proxy-service.${NS}.svc.cluster.local" zimbra
+su -c "/opt/zimbra/bin/zmprov ms ${HOSTNAME}.proxy-service.${NS}.svc.cluster.local zimbraReverseProxyMailMode https" zimbra
 
 echo "Restart Zimbra"
-sudo su -c "/opt/zimbra/bin/zmcontrol restart" zimbra
+service zimbra restart
 
 echo "Restart CROND"
 service crond restart
 
 echo "Server is ready..."
+
 if [[ $1 == "-d" ]]; then
   while true; do sleep 1000; done
 fi

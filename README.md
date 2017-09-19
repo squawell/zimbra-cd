@@ -43,10 +43,10 @@ wget -qO- https://get.docker.com/ | sh
 curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
 
 chmod +x ./kubectl
-sudo mv ./kubectl /usr/local/bin/kubectl
+mv ./kubectl /usr/local/bin/kubectl
 
 ## get kops
-wget https://github.com/kubernetes/kops/releases/download/1.6.2/kops-linux-amd64
+wget https://github.com/kubernetes/kops/releases/download/1.7.0/kops-linux-amd64
 chmod +x kops-linux-amd64
 
 mv kops-linux-amd64 /usr/local/bin/kops
@@ -93,8 +93,8 @@ kops update cluster --yes
 kops rolling-update cluster --yes
 
 ## get helm client
-wget https://storage.googleapis.com/kubernetes-helm/helm-v2.2.1-linux-amd64.tar.gz
-tar -zxvf helm-v2.2.1-linux-amd64.tar.gz
+wget https://storage.googleapis.com/kubernetes-helm/helm-v2.6.1-linux-amd64.tar.gz
+tar -zxvf helm-v2.6.1-linux-amd64.tar.gz
 mv linux-amd64/helm /usr/local/bin/helm
 
 ## install tiller

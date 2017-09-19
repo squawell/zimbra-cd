@@ -69,10 +69,16 @@ if [ -d "/opt/zimbra" ]; then
         chown -R zimbra:zimbra /opt/zimbra/.ssh
 	echo "========================"
 else
+  if [ "${HOSTNAME}" = "ldap-0" ]; then
 	cd /zcs-* && ./install.sh --platform-override < /install_override
+  else
+  envsubst < /install_override_mmr > /install_override_mmr_template
+  cd /zcs-* && ./install.sh --platform-override < /install_override_mmr_template
+  fi
 	echo "========================"
 fi
 
+if [ "${HOSTNAME}" = "ldap-0" ]; then
 echo "Create zimbra config from configmap"
 envsubst < /etc/config/zimbra.conf > /zimbra_config_generated
 
@@ -81,7 +87,7 @@ cat /zimbra_config_generated
 
 echo "Configure Zimbra"
 /opt/zimbra/libexec/zmsetup.pl -c /zimbra_config_generated
-
+fi
 
 echo "Fix rsyslog"
 cat <<EOF >> /etc/rsyslog.conf
@@ -100,13 +106,21 @@ su -c /opt/zimbra/bin/zmupdateauthkeys zimbra
 echo "Restart Zimbra"
 service zimbra restart
 
+if [ "${HOSTNAME}" = "ldap-0" ]; then
 echo "Update LDAP Password"
 su -c "/opt/zimbra/bin/zmldappasswd -r ${PASSWORD}" -s /bin/sh zimbra
 su -c "/opt/zimbra/bin/zmldappasswd -a ${PASSWORD}" -s /bin/sh zimbra
 su -c "/opt/zimbra/bin/zmldappasswd -p ${PASSWORD}" -s /bin/sh zimbra
+su -c "/opt/zimbra/bin/zmldappasswd -l ${PASSWORD}" -s /bin/sh zimbra
 su -c "/opt/zimbra/bin/zmldappasswd ${PASSWORD}" -s /bin/sh zimbra
 su -c "/opt/zimbra/bin/zmlocalconfig -e ldap_bes_searcher_password=${PASSWORD}" -s /bin/sh zimbra
 su -c "/opt/zimbra/bin/zmlocalconfig -e ldap_nginx_password=${PASSWORD}" -s /bin/sh zimbra
+
+su -c "/opt/zimbra/libexec/zmldapenable-mmr -s 1 -m ldap://ldap-1.ldap-service.${NS}.svc.cluster.local:389/" -s /bin/sh zimbra
+su -c "/opt/zimbra/bin/zmlocalconfig -e ldap_master_url=\"ldap://ldap-0.ldap-service.${NS}.svc.cluster.local:389 ldap://ldap-1.ldap-service.${NS}.svc.cluster.local:389\"" -s /bin/sh zimbra
+su -c "/opt/zimbra/bin/zmlocalconfig -e ldap_url=\"ldap://ldap-0.ldap-service.${NS}.svc.cluster.local:389 ldap://ldap-1.ldap-service.${NS}.svc.cluster.local:389\"" -s /bin/sh zimbra
+service zimbra restart
+fi
 
 echo "Restart CROND"
 service crond restart

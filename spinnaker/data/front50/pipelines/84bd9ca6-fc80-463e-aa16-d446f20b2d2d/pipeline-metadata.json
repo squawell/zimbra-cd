@@ -1,0 +1,54 @@
+{
+  "keepWaitingPipelines" : false,
+  "parameterConfig" : [ {
+    "default" : "default",
+    "description" : "Cluster name",
+    "name" : "CLUSTER_NAME"
+  }, {
+    "default" : "master",
+    "description" : "Git branch",
+    "name" : "GIT_BRANCH"
+  }, {
+    "default" : "git@github.com:cascadeo/synacor.git",
+    "description" : "Git repo",
+    "name" : "GIT_REPO"
+  } ],
+  "lastModifiedBy" : "anonymous",
+  "index" : 3,
+  "triggers" : [ ],
+  "executionEngine" : "v2",
+  "limitConcurrent" : true,
+  "application" : "zimbra",
+  "parallel" : true,
+  "name" : "Rolling-updates to existing Zimbra cluster",
+  "stages" : [ {
+    "command" : "git clone -b ${parameters.GIT_BRANCH} ${parameters.GIT_REPO} /tmp/deploy_${parameters.CLUSTER_NAME}-${parameters.GIT_BRANCH}",
+    "failPipeline" : true,
+    "name" : "Pull from repo",
+    "refId" : "1",
+    "requisiteStageRefIds" : [ ],
+    "type" : "script",
+    "user" : "[anonymous]",
+    "waitForCompletion" : true
+  }, {
+    "command" : "bash /tmp/deploy_${parameters.CLUSTER_NAME}-${parameters.GIT_BRANCH}/zimbra/rolling-update.sh ${parameters.CLUSTER_NAME}",
+    "failPipeline" : true,
+    "name" : "Apply rolling-updates",
+    "refId" : "2",
+    "requisiteStageRefIds" : [ "1" ],
+    "type" : "script",
+    "user" : "[anonymous]",
+    "waitForCompletion" : true
+  }, {
+    "command" : "rm -rf /tmp/deploy_${parameters.CLUSTER_NAME}-${parameters.GIT_BRANCH}",
+    "failPipeline" : true,
+    "name" : "Cleanup",
+    "refId" : "3",
+    "requisiteStageRefIds" : [ "2" ],
+    "type" : "script",
+    "user" : "[anonymous]",
+    "waitForCompletion" : true
+  } ],
+  "id" : "84bd9ca6-fc80-463e-aa16-d446f20b2d2d",
+  "updateTs" : "1501092202000"
+}
